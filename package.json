@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cp .env.build .env.local && next build && rm -rf .next/cache .next/dev && rm .env.local",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
