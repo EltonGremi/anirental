@@ -1,18 +1,8 @@
 name = "anirental"
 type = "javascript"
 compatibility_date = "2026-04-08"
+pages_build_output_dir = ".next"
 
 [build]
 command = "npm run build"
 cwd = "."
-
-[build.upload]
-format = "service-worker"
-main = "./.cloudflare/index.js"
-
-[env.production]
-routes = [
-  { pattern = "*.pages.dev/*", zone_name = "pages.dev" }
-]
-
-vars = {}
