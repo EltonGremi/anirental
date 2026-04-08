@@ -1,0 +1,7 @@
+.next/cache
+.next/dev
+**/*.sst
+node_modules
+.git
+.env
+.env.local

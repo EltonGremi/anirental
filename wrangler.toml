@@ -1,0 +1,13 @@
+name = "anaeroplani"
+type = "javascript"
+compatibility_date = "2026-04-08"
+pages_build_output_dir = ".next/static"
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[env.production]
+routes = [
+  { pattern = "**.pages.dev/*", zone_name = "pages.dev" }
+]
