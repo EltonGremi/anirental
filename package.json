@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "cp .env.build .env.local && next build --no-lint && rm -rf .next/cache .next/dev && rm .env.local",
+    "build": "cp .env.build .env.local && next build && rm -rf .next/cache .next/dev && rm .env.local",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.1",
-    "next": "^15.5.2",
+    "next": "^16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
