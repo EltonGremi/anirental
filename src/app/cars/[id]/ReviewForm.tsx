@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { ratingSchema, commentSchema } from '@/lib/validators'
 
 interface ReviewFormProps {
   vehicleId: string
@@ -16,18 +17,29 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
 
     if (!user) {
       alert('Devi essere loggato per lasciare una recensione')
       return
     }
 
+    // Validazione con Zod
+    try {
+      ratingSchema.parse(rating)
+      commentSchema.parse(comment)
+    } catch (err: any) {
+      setError(err.message || 'Errore di validazione')
+      return
+    }
+
     setLoading(true)
 
-    const { error } = await supabase.from('reviews').insert({
+    const { error: err } = await supabase.from('reviews').insert({
       vehicle_id: vehicleId,
       author_id: user.id,
       author_name: user.user_metadata?.full_name || user.email,
@@ -37,8 +49,8 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
 
     setLoading(false)
 
-    if (error) {
-      alert('Errore: ' + error.message)
+    if (err) {
+      setError('Errore: ' + err.message)
     } else {
       setSubmitted(true)
       setComment('')
@@ -61,7 +73,13 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
           ✅ Grazie per la tua recensione!
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <>
+          {error && (
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-700 mb-4">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="text-sm text-gray-600 mb-2 block">Valutazione</label>
             <div className="flex gap-2">
@@ -100,7 +118,8 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
           >
             {loading ? 'Invio...' : 'Invia recensione'}
           </button>
-        </form>
+          </form>
+        </>
       )}
     </div>
   )

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { formatPrice } from '@/lib/format'
+import { phoneSchema, dateSchema, noteSchema } from '@/lib/validators'
 
 interface Props {
   vehicle: any
@@ -49,15 +50,14 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
       return
     }
 
-    if (!phoneNumber.trim()) {
-      setError('Il numero di telefono è obbligatorio.')
-      return
-    }
-
-    // Validazione formato telefono (almeno 9 caratteri)
-    const phoneRegex = /^[\d\s\-\+\(\)]+$/
-    if (phoneNumber.length < 9 || !phoneRegex.test(phoneNumber)) {
-      setError('Inserisci un numero di telefono valido.')
+    // Validazione con Zod
+    try {
+      phoneSchema.parse(phoneNumber)
+      dateSchema.parse(startDate)
+      dateSchema.parse(endDate)
+      noteSchema.parse(notes)
+    } catch (err: any) {
+      setError(err.message || 'Errore di validazione')
       return
     }
 

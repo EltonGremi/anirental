@@ -3,6 +3,14 @@ import { createClient } from 'jsr:@supabase/supabase-js@2'
 const TELEGRAM_TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN')!
 const TELEGRAM_CHAT_ID = Deno.env.get('TELEGRAM_CHAT_ID')!
 
+// Escape special Markdown characters to prevent injection attacks
+function escapeMarkdown(text: string | null | undefined): string {
+  if (!text) return 'N/D'
+  return String(text)
+    .replace(/[_*\[\]()~`>#+\-=|{}.!]/g, '\\$&')
+    .substring(0, 500) // Limit length against DOS
+}
+
 Deno.serve(async (req) => {
   const payload = await req.json()
   const booking = payload.record
@@ -30,18 +38,18 @@ Deno.serve(async (req) => {
   const end = new Date(booking.end_date)
   const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
 
-  // Messaggio Telegram
+  // Messaggio Telegram - SAFE: valori escapati per evitare injection
   const message = `
 🚗 *Nuova richiesta prenotazione*
 
 👤 *Cliente*
-${client?.full_name ?? 'N/D'}
+${escapeMarkdown(client?.full_name)}
 
 📞 *Numero di telefono*
-${booking.phone_number ?? client?.phone ?? 'No telefono'}
+[RISERVATO - Vedi email]
 
 🚙 *Auto*
-${vehicle?.brand} ${vehicle?.model} · ${vehicle?.plate}
+${escapeMarkdown(vehicle?.brand)} ${escapeMarkdown(vehicle?.model)} · ${escapeMarkdown(vehicle?.plate)}
 
 📅 *Periodo*
 ${booking.start_date} → ${booking.end_date} · ${days} giorni
@@ -49,7 +57,7 @@ ${booking.start_date} → ${booking.end_date} · ${days} giorni
 💰 *Totale stimato*
 ${booking.total_price?.toLocaleString()} ALL
 
-${booking.notes ? `📝 *Note*\n${booking.notes}` : ''}
+${booking.notes ? `📝 *Note*\n${escapeMarkdown(booking.notes)}` : ''}
   `.trim()
 
   // Bottoni inline

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import LocationPicker from '../LocationPicker'
 import { VEHICLE_CATEGORIES } from '@/lib/categories'
+import { vehicleSchema } from '@/lib/validators'
 
 export default function NewVehiclePage() {
   const supabase = createClient()
@@ -12,6 +13,7 @@ export default function NewVehiclePage() {
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
+  const [error, setError] = useState('')
   const [form, setForm] = useState({
     brand: '',
     model: '',
@@ -45,11 +47,31 @@ export default function NewVehiclePage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
     setLoading(true)
+
+    // Validazione con Zod
+    try {
+      vehicleSchema.parse({
+        brand: form.brand,
+        model: form.model,
+        plate: form.plate.toUpperCase(),
+        year: parseInt(form.year),
+        price_per_day: parseFloat(form.daily_rate),
+        latitude: form.latitude,
+        longitude: form.longitude,
+        description: '',
+      })
+    } catch (err: any) {
+      setError(err.message || 'Errore di validazione')
+      setLoading(false)
+      return
+    }
+
     const { error } = await supabase.from('vehicles').insert({
       brand: form.brand,
       model: form.model,
-      plate: form.plate,
+      plate: form.plate.toUpperCase(),
       year: parseInt(form.year),
       seats: parseInt(form.seats),
       transmission: form.transmission,
@@ -60,8 +82,14 @@ export default function NewVehiclePage() {
       photos: photoUrl ? [photoUrl] : [],
       status: 'available',
     })
-    if (!error) router.push('/dashboard/vehicles')
+    
     setLoading(false)
+    
+    if (error) {
+      setError('Errore: ' + error.message)
+    } else {
+      router.push('/dashboard/vehicles')
+    }
   }
 
   return (
@@ -71,6 +99,12 @@ export default function NewVehiclePage() {
         <p className="text-gray-500 text-sm mb-8">Compila i dati del veicolo</p>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4">
+
+          {error && (
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-700">
+              {error}
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
