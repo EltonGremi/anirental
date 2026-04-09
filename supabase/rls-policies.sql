@@ -108,16 +108,16 @@ CREATE POLICY "Clients can create own bookings"
     auth.uid() IN (SELECT id FROM public.profiles WHERE role != 'admin')
   );
 
--- Clients can update their own pending/awaiting bookings
-CREATE POLICY "Clients can update own bookings (if not confirmed)"
+-- Clients can update their own pending bookings
+CREATE POLICY "Clients can update own bookings (if pending)"
   ON public.bookings FOR UPDATE
   USING (
     auth.uid() = client_id AND
-    status IN ('pending', 'awaiting_confirmation')
+    status = 'pending'
   )
   WITH CHECK (
     auth.uid() = client_id AND
-    status IN ('pending', 'awaiting_confirmation')
+    status = 'pending'
   );
 
 -- Admins can update any booking (confirmation, rejection, etc)
