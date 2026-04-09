@@ -33,6 +33,12 @@ ALTER TABLE public.notifications_log ENABLE ROW LEVEL SECURITY;
 -- PROFILES TABLE
 -- ============================================================================
 
+-- Drop old policies if they exist
+DROP POLICY IF EXISTS "Users can read own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Admins can read all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Prevent unauthorized profile deletion" ON public.profiles;
+
 -- Users can see their own profile
 CREATE POLICY "Users can read own profile"
   ON public.profiles FOR SELECT
@@ -60,6 +66,12 @@ CREATE POLICY "Prevent unauthorized profile deletion"
 -- VEHICLES TABLE
 -- ============================================================================
 
+-- Drop old policies if they exist
+DROP POLICY IF EXISTS "Anyone can read vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "Only admins can create vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "Only admins can update vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "Only admins can delete vehicles" ON public.vehicles;
+
 -- Everyone (including guests) can read vehicles (public catalog)
 CREATE POLICY "Anyone can read vehicles"
   ON public.vehicles FOR SELECT
@@ -84,6 +96,15 @@ CREATE POLICY "Only admins can delete vehicles"
 -- ============================================================================
 -- BOOKINGS TABLE
 -- ============================================================================
+
+-- Drop old policies if they exist
+DROP POLICY IF EXISTS "Clients can read own bookings" ON public.bookings;
+DROP POLICY IF EXISTS "Admins can read all bookings" ON public.bookings;
+DROP POLICY IF EXISTS "Clients can create own bookings" ON public.bookings;
+DROP POLICY IF EXISTS "Clients can update own bookings (if pending)" ON public.bookings;
+DROP POLICY IF EXISTS "Admins can update any booking" ON public.bookings;
+DROP POLICY IF EXISTS "Clients can cancel own bookings" ON public.bookings;
+DROP POLICY IF EXISTS "Admins can delete any booking" ON public.bookings;
 
 -- Clients can see only their own bookings
 CREATE POLICY "Clients can read own bookings"
@@ -138,6 +159,13 @@ CREATE POLICY "Admins can delete any booking"
 -- REVIEWS TABLE
 -- ============================================================================
 
+-- Drop old policies if they exist
+DROP POLICY IF EXISTS "Anyone can read reviews" ON public.reviews;
+DROP POLICY IF EXISTS "Authenticated users can create reviews" ON public.reviews;
+DROP POLICY IF EXISTS "Users can update own reviews" ON public.reviews;
+DROP POLICY IF EXISTS "Users can delete own reviews" ON public.reviews;
+DROP POLICY IF EXISTS "Admins can moderate reviews" ON public.reviews;
+
 -- Everyone can read reviews (public)
 CREATE POLICY "Anyone can read reviews"
   ON public.reviews FOR SELECT
@@ -170,6 +198,11 @@ CREATE POLICY "Admins can moderate reviews"
 -- ============================================================================
 -- NOTIFICATIONS_LOG TABLE
 -- ============================================================================
+
+-- Drop old policies if they exist
+DROP POLICY IF EXISTS "Admins can read notifications log" ON public.notifications_log;
+DROP POLICY IF EXISTS "Service role can create notifications" ON public.notifications_log;
+DROP POLICY IF EXISTS "Admins can delete old notifications" ON public.notifications_log;
 
 -- Only admins can read notifications log
 CREATE POLICY "Admins can read notifications log"
