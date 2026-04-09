@@ -135,7 +135,7 @@ CREATE POLICY "Clients can cancel own bookings"
   ON public.bookings FOR DELETE
   USING (
     auth.uid() = client_id AND
-    status NOT IN ('completed', 'cancelled')
+    status IN ('pending', 'confirmed')
   );
 
 -- Admins can delete any booking
