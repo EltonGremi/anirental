@@ -11,6 +11,15 @@
 BEGIN;
 
 -- ============================================================================
+-- HELPER FUNCTION
+-- ============================================================================
+-- This function safely gets the current user's role without recursive subqueries
+CREATE OR REPLACE FUNCTION get_user_role()
+RETURNS user_role AS $$
+  SELECT role FROM public.profiles WHERE id = auth.uid() LIMIT 1
+$$ LANGUAGE SQL STABLE;
+
+-- ============================================================================
 -- ENABLE RLS ON ALL TABLES
 -- ============================================================================
 
@@ -32,9 +41,7 @@ CREATE POLICY "Users can read own profile"
 -- Admins can see all profiles
 CREATE POLICY "Admins can read all profiles"
   ON public.profiles FOR SELECT
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- Users can update only their own profile
 CREATE POLICY "Users can update own profile"
@@ -47,15 +54,13 @@ CREATE POLICY "Users can update own profile"
 -- Prevent non-admins from creating/deleting profiles (handled by auth triggers)
 CREATE POLICY "Prevent unauthorized profile deletion"
   ON public.profiles FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- ============================================================================
 -- VEHICLES TABLE
 -- ============================================================================
 
--- Everyone can read vehicles (public catalog)
+-- Everyone (including guests) can read vehicles (public catalog)
 CREATE POLICY "Anyone can read vehicles"
   ON public.vehicles FOR SELECT
   USING (true);
@@ -63,26 +68,18 @@ CREATE POLICY "Anyone can read vehicles"
 -- Only admins can create vehicles
 CREATE POLICY "Only admins can create vehicles"
   ON public.vehicles FOR INSERT
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  WITH CHECK (get_user_role() = 'admin');
 
 -- Only admins can update vehicles
 CREATE POLICY "Only admins can update vehicles"
   ON public.vehicles FOR UPDATE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ))
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin')
+  WITH CHECK (get_user_role() = 'admin');
 
 -- Only admins can delete vehicles
 CREATE POLICY "Only admins can delete vehicles"
   ON public.vehicles FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- ============================================================================
 -- BOOKINGS TABLE
@@ -96,16 +93,14 @@ CREATE POLICY "Clients can read own bookings"
 -- Admins can see all bookings
 CREATE POLICY "Admins can read all bookings"
   ON public.bookings FOR SELECT
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- Only clients can create bookings for themselves
 CREATE POLICY "Clients can create own bookings"
   ON public.bookings FOR INSERT
   WITH CHECK (
     auth.uid() = client_id AND
-    auth.uid() IN (SELECT id FROM public.profiles WHERE role != 'admin')
+    get_user_role() != 'admin'
   );
 
 -- Clients can update their own pending bookings
@@ -123,12 +118,8 @@ CREATE POLICY "Clients can update own bookings (if pending)"
 -- Admins can update any booking (confirmation, rejection, etc)
 CREATE POLICY "Admins can update any booking"
   ON public.bookings FOR UPDATE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ))
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin')
+  WITH CHECK (get_user_role() = 'admin');
 
 -- Clients can cancel their own bookings
 CREATE POLICY "Clients can cancel own bookings"
@@ -141,9 +132,7 @@ CREATE POLICY "Clients can cancel own bookings"
 -- Admins can delete any booking
 CREATE POLICY "Admins can delete any booking"
   ON public.bookings FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- ============================================================================
 -- REVIEWS TABLE
@@ -176,9 +165,7 @@ CREATE POLICY "Users can delete own reviews"
 -- Admins can delete any review (moderation)
 CREATE POLICY "Admins can moderate reviews"
   ON public.reviews FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- ============================================================================
 -- NOTIFICATIONS_LOG TABLE
@@ -187,9 +174,7 @@ CREATE POLICY "Admins can moderate reviews"
 -- Only admins can read notifications log
 CREATE POLICY "Admins can read notifications log"
   ON public.notifications_log FOR SELECT
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 -- Only service role (Deno functions) can insert
 CREATE POLICY "Service role can create notifications"
@@ -199,9 +184,7 @@ CREATE POLICY "Service role can create notifications"
 -- Only admins can delete old logs
 CREATE POLICY "Admins can delete old notifications"
   ON public.notifications_log FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
+  USING (get_user_role() = 'admin');
 
 COMMIT;
 
