@@ -127,53 +127,63 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
       </div>
 
       {filteredVehicles.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:gap-12">
           {filteredVehicles.map((v) => (
             <Link
               key={v.id}
               href={`/cars/${v.id}`}
-              className="card-hover group overflow-hidden bg-white"
+              className="card-hover group flex flex-col justify-between"
             >
-              <div className="relative overflow-hidden h-48">
-                {v.photos?.[0] ? (
-                  <img 
-                    src={v.photos[0]} 
-                    alt={v.model} 
-                    className="w-full h-full object-cover transition duration-300" 
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                    Nuk ka foto
-                  </div>
-                )}
-              </div>
-              
-              <div className="p-5">
-                <div className="mb-3">
-                  <p className="font-semibold text-gray-900">
-                    {v.brand} {v.model}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {v.year} · {v.seats} vende · {v.transmission === 'manual' ? 'Manual' : 'Automatik'}
-                  </p>
+              <div>
+                <div className="relative overflow-hidden h-64 rounded-t-3xl bg-zinc-50">
+                  {v.photos?.[0] ? (
+                    <img 
+                      src={v.photos[0]} 
+                      alt={v.model} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-300 text-sm font-light uppercase tracking-widest">
+                      Nuk ka foto
+                    </div>
+                  )}
                 </div>
                 
-                <div className="mb-4">
-                  <p className="text-2xl font-bold text-blue-900">{formatPrice(v.daily_rate)} ALL</p>
-                  <p className="text-xs text-gray-400">në ditë</p>
+                <div className="p-6 pb-2">
+                  <div className="mb-4">
+                    <p className="text-xl font-bold text-black tracking-tight uppercase">
+                      {v.brand} {v.model}
+                    </p>
+                    <p className="text-sm text-zinc-500 font-light mt-1 flex items-center gap-2">
+                      <span>{v.year}</span>
+                      <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
+                      <span>{v.seats} vende</span>
+                      <span className="w-1 h-1 rounded-full bg-zinc-300"></span>
+                      <span>{v.transmission === 'manual' ? 'Manual' : 'Automatik'}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="px-6 pb-6 mt-auto">
+                <div className="flex items-end justify-between mb-6">
+                  <div>
+                    <p className="text-3xl font-bold text-black tracking-tighter">{formatPrice(v.daily_rate)} ALL</p>
+                    <p className="text-xs text-zinc-400 font-medium uppercase tracking-widest mt-0.5">/ në ditë</p>
+                  </div>
                 </div>
 
-                <button className="btn-primary w-full py-2 text-sm">
-                  Rezervo
-                </button>
+                <div className="w-full bg-black text-white text-center py-3.5 rounded-full font-medium text-sm hover:bg-zinc-800 transition-colors">
+                  Rezervo Tani
+                </div>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-gray-500 text-base">Nuk u gjet asnjë mjet</p>
-          <p className="text-gray-400 text-sm mt-1">Ndrysho kriteret e kërkimit</p>
+        <div className="text-center py-24 bg-zinc-50 rounded-3xl">
+          <p className="text-zinc-500 text-lg font-light">Nuk u gjet asnjë mjet</p>
+          <p className="text-zinc-400 text-sm mt-2">Ndrysho kriteret e kërkimit për më shumë rezultate.</p>
         </div>
       )}
     </>

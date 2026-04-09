@@ -2,71 +2,70 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #000000;
+    --foreground: #ffffff;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* ===== CUSTOM COMPONENTS ===== */
 
 @layer components {
-  /* Card Hover Effect - Minimal */
+  /* Card Hover Effect - Minimal & Premium */
   .card-hover {
-    @apply rounded-xl border border-gray-200 transition-all duration-300 
-           hover:shadow-lg hover:border-gray-300;
+    @apply rounded-3xl border border-transparent bg-white transition-all duration-500
+           hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1;
   }
 
-  /* Primary Button - Professional */
+  /* Primary Button - Premium Black */
   .btn-primary {
-    @apply bg-blue-900 hover:bg-blue-950 text-white font-medium px-6 py-3 
-           rounded-lg transition duration-300 shadow-sm hover:shadow-md;
+    @apply bg-black hover:bg-zinc-900 text-white font-medium px-8 py-3.5 
+           rounded-full transition duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5;
   }
 
-  /* Accent Button - Professional */
+  /* Accent Button - Minimal Gray/White */
   .btn-accent {
-    @apply bg-gray-900 hover:bg-gray-950 text-white font-medium px-6 py-3 
-           rounded-lg transition duration-300 shadow-sm hover:shadow-md;
+    @apply bg-zinc-100 hover:bg-zinc-200 text-black font-medium px-8 py-3.5 
+           rounded-full transition duration-300;
   }
 
   /* Text */
   .gradient-text {
-    @apply text-blue-900 font-semibold;
+    @apply text-black font-bold tracking-tight;
   }
 
   /* Icon Button */
   .icon-btn {
-    @apply inline-flex items-center justify-center w-10 h-10 rounded-full 
-           bg-gray-100 hover:bg-gray-200 transition duration-200 
-           text-gray-600 hover:text-gray-800;
+    @apply inline-flex items-center justify-center w-12 h-12 rounded-full 
+           bg-zinc-50 hover:bg-zinc-100 transition duration-300 
+           text-zinc-600 hover:text-black shadow-sm;
   }
 
   /* Badge */
   .badge {
-    @apply inline-block px-3 py-1 rounded-full text-xs font-medium 
-           bg-gray-100 text-gray-700;
+    @apply inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase
+           bg-zinc-100 text-zinc-800;
   }
 
   /* Input Focus */
   .input-focus {
-    @apply border-blue-500 ring-2 ring-blue-100;
+    @apply border-zinc-300 ring-2 ring-zinc-100;
   }
 }
 
