@@ -18,7 +18,6 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.vehicles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.available_dates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications_log ENABLE ROW LEVEL SECURITY;
 
 -- ============================================================================
@@ -182,37 +181,6 @@ CREATE POLICY "Admins can moderate reviews"
   ));
 
 -- ============================================================================
--- AVAILABLE_DATES TABLE
--- ============================================================================
-
--- Everyone can read available dates
-CREATE POLICY "Anyone can read available dates"
-  ON public.available_dates FOR SELECT
-  USING (true);
-
--- Only admins can manage available dates
-CREATE POLICY "Only admins can create available dates"
-  ON public.available_dates FOR INSERT
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
-
-CREATE POLICY "Only admins can update available dates"
-  ON public.available_dates FOR UPDATE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ))
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
-
-CREATE POLICY "Only admins can delete available dates"
-  ON public.available_dates FOR DELETE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'
-  ));
-
--- ============================================================================
 -- NOTIFICATIONS_LOG TABLE
 -- ============================================================================
 
@@ -246,6 +214,6 @@ COMMIT;
 -- WHERE schemaname = 'public';
 --
 -- SELECT * FROM pg_policies WHERE tablename IN (
---   'profiles', 'vehicles', 'bookings', 'reviews', 'available_dates', 'notifications_log'
+--   'profiles', 'vehicles', 'bookings', 'reviews', 'notifications_log'
 -- );
 -- ============================================================================
