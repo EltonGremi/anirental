@@ -22,7 +22,7 @@ export default function NewVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'famiglia',
+    category: 'familje',
     latitude: 40.748305,
     longitude: 19.649150,
   })
@@ -50,7 +50,7 @@ export default function NewVehiclePage() {
     setError('')
     setLoading(true)
 
-    // Validazione con Zod
+    // Validimi me Zod
     try {
       vehicleSchema.parse({
         brand: form.brand,
@@ -63,7 +63,7 @@ export default function NewVehiclePage() {
         description: '',
       })
     } catch (err: any) {
-      setError(err.message || 'Errore di validazione')
+      setError(err.message || 'Gabim validimi')
       setLoading(false)
       return
     }
@@ -86,7 +86,7 @@ export default function NewVehiclePage() {
     setLoading(false)
     
     if (error) {
-      setError('Errore: ' + error.message)
+      setError('Gabim: ' + error.message)
     } else {
       router.push('/dashboard/vehicles')
     }
@@ -95,8 +95,8 @@ export default function NewVehiclePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-xl mx-auto">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Nuovo veicolo</h1>
-        <p className="text-gray-500 text-sm mb-8">Compila i dati del veicolo</p>
+        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Mjet i ri</h1>
+        <p className="text-gray-500 text-sm mb-8">Plotëso të dhënat e mjetit</p>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4">
 
@@ -108,7 +108,7 @@ export default function NewVehiclePage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Marca</label>
+              <label className="text-sm text-gray-600 mb-1 block">Marka</label>
               <input
                 required
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
@@ -118,7 +118,7 @@ export default function NewVehiclePage() {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Modello</label>
+              <label className="text-sm text-gray-600 mb-1 block">Modeli</label>
               <input
                 required
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
@@ -141,7 +141,7 @@ export default function NewVehiclePage() {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Anno</label>
+              <label className="text-sm text-gray-600 mb-1 block">Viti</label>
               <input
                 required
                 type="number"
@@ -155,7 +155,7 @@ export default function NewVehiclePage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Posti</label>
+              <label className="text-sm text-gray-600 mb-1 block">Vende</label>
               <input
                 required
                 type="number"
@@ -166,18 +166,18 @@ export default function NewVehiclePage() {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Cambio</label>
+              <label className="text-sm text-gray-600 mb-1 block">Marsha</label>
               <select
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
                 value={form.transmission}
                 onChange={e => setForm({...form, transmission: e.target.value})}
               >
-                <option value="manual">Manuale</option>
-                <option value="automatic">Automatico</option>
+                <option value="manual">Manual</option>
+                <option value="automatic">Automatik</option>
               </select>
             </div>
             <div>
-              <label className="text-sm text-gray-600 mb-1 block">Categoria</label>
+              <label className="text-sm text-gray-600 mb-1 block">Kategoria</label>
               <select
                 required
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
@@ -194,7 +194,7 @@ export default function NewVehiclePage() {
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">Prezzo giornaliero (ALL)</label>
+            <label className="text-sm text-gray-600 mb-1 block">Çmimi ditor (ALL)</label>
             <input
               required
               type="number"
@@ -213,14 +213,14 @@ export default function NewVehiclePage() {
               onChange={handlePhoto}
               className="w-full text-sm text-gray-500"
             />
-            {uploading && <p className="text-xs text-gray-400 mt-1">Caricamento...</p>}
+            {uploading && <p className="text-xs text-gray-400 mt-1">Duke ngarkuar...</p>}
             {photoUrl && (
               <img src={photoUrl} alt="preview" className="mt-2 w-full h-40 object-cover rounded-xl" />
             )}
           </div>
 
           <div className="border-t border-gray-100 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 Ubicazione ritiro</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 Vendndodhja e marrjes</h3>
             <LocationPicker
               initialLat={40.748305}
               initialLng={19.649150}
@@ -235,7 +235,7 @@ export default function NewVehiclePage() {
             disabled={loading || uploading}
             className="btn-primary w-full py-3 text-sm font-medium disabled:opacity-50"
           >
-            {loading ? 'Salvataggio...' : 'Salva veicolo'}
+            {loading ? 'Duke ruajtur...' : 'Ruaj mjetin'}
           </button>
 
         </form>

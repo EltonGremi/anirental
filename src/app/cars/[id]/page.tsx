@@ -37,15 +37,6 @@ export default async function CarPage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
-        <a href="/" className="text-xl font-semibold text-gray-900">AutoRent Albania</a>
-        {user ? (
-          <a href="/dashboard" className="text-sm text-gray-500 border border-gray-200 rounded-lg px-4 py-2">Dashboard</a>
-        ) : (
-          <a href="/login" className="text-sm text-white bg-gray-900 rounded-lg px-4 py-2">Accedi</a>
-        )}
-      </header>
-
       <div className="max-w-2xl mx-auto px-8 py-12">
         <Badges badges={vehicle.badges} />
         <VideoPlayer url={vehicle.video_url} />
@@ -55,12 +46,12 @@ export default async function CarPage({ params }: { params: Promise<{ id: string
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">{vehicle.brand} {vehicle.model}</h1>
             <p className="text-gray-500 mt-1">
-              {vehicle.year} · {vehicle.seats} posti · {vehicle.transmission === 'manual' ? 'Manuale' : 'Automatico'} · {vehicle.plate}
+              {vehicle.year} · {vehicle.seats} vende · {vehicle.transmission === 'manual' ? 'Manual' : 'Automatik'} · {vehicle.plate}
             </p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-semibold text-gray-900">{formatPrice(vehicle.daily_rate)} ALL</p>
-            <p className="text-sm text-gray-400">al giorno</p>
+            <p className="text-sm text-gray-400">në ditë</p>
           </div>
         </div>
 

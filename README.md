@@ -1,135 +1,132 @@
 # 🚗 AutoRent Albania
 
-A modern car rental platform built with Next.js, Supabase, and Cloudflare.
+Platformë moderne për marrje me qira makinash, ndërtuar me Next.js, Supabase dhe Vercel.
 
-## Stack
+## Stack Teknik
 
 - **Frontend:** Next.js 16.2, React 19, TypeScript, Tailwind CSS
-- **Database:** Supabase (PostgreSQL)
-- **Deployment:** Cloudflare Pages (free)
-- **Backend:** Cloudflare Workers (free)
-- **Auth:** Google OAuth via Supabase
+- **Databazë:** Supabase (PostgreSQL)
+- **Deploy:** Vercel (Frontend & Webhooks)
+- **Backend:** Next.js Serverless Functions / Route Handlers në Vercel
+- **Autentifikim:** Google OAuth përmes Supabase
 
-## Getting Started
+## Si të Fillosh
 
-### 1. Clone the repository
+### 1. Klono repository-n
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/anirental.git
+git clone https://github.com/EltonGremi/anirental.git
 cd anirental
 ```
 
-### 2. Install dependencies
+### 2. Instalo varësitë
 
 ```bash
 npm install
 ```
 
-### 3. Setup environment variables
+### 3. Konfiguro variablat e mjedisit
 
-Copy `.env.example` to `.env.local` and fill in your credentials:
+Kopjo `.env.example` në `.env.local` dhe plotëso kredencialet:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Get your Supabase keys from:
-- https://app.supabase.com → Select project → Settings → API
+Merr çelësat e Supabase nga:
+- https://app.supabase.com → Zgjidh projektin → Settings → API
 
-### 4. Run development server
+### 4. Nis serverin e zhvillimit
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Hap [http://localhost:3000](http://localhost:3000)
 
-### 5. Build for production
+### 5. Ndërto për prodhim
 
 ```bash
 npm run build
 npm run start
 ```
 
-## Deployment
+## Deploy
 
-### Frontend (Cloudflare Pages)
+### Frontend & Backend (Vercel)
+
+Projekti është optimizuar për deploy zero-config në [Vercel](https://vercel.com).
+Webhook-et dhe API-të (si njoftimet Telegram) ekzekutohen si Serverless Functions përmes Next.js Route Handlers (`src/app/api/...`).
+
+Mund të lidhësh repository-n GitHub me panelin e Vercel ose të bësh deploy nga CLI:
 
 ```bash
-npx wrangler login
-npx wrangler pages deploy .next
+npm i -g vercel
+vercel
 ```
 
-Or connect your GitHub repo via [Cloudflare Dashboard](https://dash.cloudflare.com/pages)
-
-### Backend (Cloudflare Workers)
-
-See `cloudflare-workers/` directory for notification and webhook handlers.
-
-## Project Structure
+## Strukturë e Projektit
 
 ```
 src/
 ├── app/
-│   ├── cars/[id]/           # Car details, booking, reviews
-│   ├── dashboard/           # Admin & client dashboards
-│   ├── category/[slug]/     # Category filtering
-│   └── page.tsx             # Homepage
+│   ├── cars/[id]/           # Detaje makine, rezervim, vlerësime
+│   ├── dashboard/           # Paneli i adminit & klientit
+│   ├── category/[slug]/     # Filtrim sipas kategorisë
+│   └── page.tsx             # Faqja kryesore
+├── components/
+│   └── Navbar.tsx           # Navbar globale
 ├── lib/
-│   ├── supabase/            # Supabase clients
-│   ├── format.ts            # Utility functions
-│   └── categories.ts        # Vehicle categories
-└── middleware.ts            # Auth protection
+│   ├── supabase/            # Klientë Supabase
+│   ├── format.ts            # Funksione ndihmëse
+│   ├── categories.ts        # Kategoritë e mjeteve
+│   └── validators.ts        # Validatorë Zod
+└── middleware.ts             # Mbrojtje autentifikimi
 
 supabase/
 ├── functions/
-│   ├── notify-booking/      # Telegram notifications
+│   ├── notify-booking/      # Njoftimet Telegram
 │   └── telegram-webhook/    # Callback handler
-└── config.toml              # Local config
-
-cloudflare-workers/          # Coming soon
-├── notify-booking/
-└── telegram-webhook/
+└── config.toml              # Konfigurim lokal
 ```
 
-## Security Notes
+## Shënime Sigurie
 
-⚠️ **Never commit sensitive data:**
-- `.env.local` is in `.gitignore`
-- Use environment variables for all secrets
-- Telegram token, API keys, etc. go in `.env.local` (local) or Cloudflare/Supabase dashboards (production)
+⚠️ **Mos publiko kurrë të dhëna sensitive:**
+- `.env.local` është në `.gitignore`
+- Përdor variabla mjedisi për të gjitha sekretet
+- Token Telegram, çelësa API, etj. vendosen në `.env.local` (lokal) ose në panelin Vercel/Supabase (prodhim)
 
-## Features
+## Funksionalitete
 
-- 🔐 Google OAuth authentication
-- 🚗 Car catalog with advanced filters
-- 📅 Booking system with date availability
-- ⭐ Reviews and ratings
-- 🤖 Telegram notifications for new bookings
-- 📧 Email confirmations via Resend
-- 🗺️ Interactive maps for pickup locations
-- 🎬 Photo gallery and videos per vehicle
-- 👨‍💼 Admin dashboard (vehicle & booking management)
-- 👥 Client dashboard (my bookings)
+- 🔐 Autentifikim me Google OAuth
+- 🚗 Katalog mjetesh me filtra të avancuara
+- 📅 Sistem rezervimi me disponueshmëri datash
+- ⭐ Vlerësime dhe nota
+- 🤖 Njoftime Telegram për rezervime të reja
+- 📧 Konfirmime me email përmes Resend
+- 🗺️ Harta interaktive për vendndodhjen e marrjes
+- 🎬 Galeri fotosh dhe videosh për çdo mjet
+- 👨‍💼 Panel admini (menaxhim mjetesh & rezervimesh)
+- 👥 Panel klienti (rezervimet e mia)
 
-## Environment Variables
+## Variablat e Mjedisit
 
-| Variable | Required | Where | Purpose |
-|----------|----------|-------|---------|
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Client | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Client | Public Supabase key |
-| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Server | Admin Supabase key |
-| `TELEGRAM_BOT_TOKEN` | ✅ | Workers | Telegram bot token |
-| `TELEGRAM_CHAT_ID` | ✅ | Workers | Admin chat ID |
-| `RESEND_API_KEY` | ✅ | Workers | Email API key |
+| Variabël | E nevojshme | Ku | Qëllimi |
+|----------|-------------|-----|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Klient | URL e projektit Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Klient | Çelësi publik Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Server | Çelësi admin Supabase |
+| `TELEGRAM_BOT_TOKEN` | ✅ | Server | Token i bot-it Telegram |
+| `TELEGRAM_CHAT_ID` | ✅ | Server | ID e chat-it admin |
+| `RESEND_API_KEY` | ✅ | Server | Çelësi API i Resend |
 
-## Learn More
+## Mëso Më Shumë
 
 - [Next.js Docs](https://nextjs.org/docs)
 - [Supabase Docs](https://supabase.com/docs)
-- [Cloudflare Pages](https://pages.cloudflare.com)
-- [Cloudflare Workers](https://workers.cloudflare.com)
+- [Vercel Docs](https://vercel.com/docs)
 
-## License
+## Liçencë
 
 MIT

@@ -26,19 +26,19 @@ export default function CancelButton({ bookingId }: { bookingId: string }) {
   if (confirm) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Sei sicuro?</span>
+        <span className="text-xs text-gray-500">Je i sigurt?</span>
         <button
           onClick={handleCancel}
           disabled={loading}
           className="text-xs text-white bg-gray-700 hover:bg-gray-800 rounded-lg px-3 py-1.5 disabled:opacity-50 transition duration-200"
         >
-          {loading ? 'Cancellando...' : 'Sì, cancella'}
+          {loading ? 'Duke anuluar...' : 'Po, anulo'}
         </button>
         <button
           onClick={() => setConfirm(false)}
           className="text-xs text-gray-500 border border-gray-200 hover:bg-gray-50 rounded-lg px-3 py-1.5 transition duration-200"
         >
-          No, torna indietro
+          Jo, kthehu mbrapa
         </button>
       </div>
     )
@@ -49,7 +49,7 @@ export default function CancelButton({ bookingId }: { bookingId: string }) {
       onClick={handleCancel}
       className="text-xs text-red-500 border border-red-100 hover:bg-red-50 rounded-lg px-3 py-1.5"
     >
-      Cancella prenotazione
+      Anulo rezervimin
     </button>
   )
 }

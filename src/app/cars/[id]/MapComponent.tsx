@@ -12,13 +12,13 @@ export default function MapComponent({ latitude, longitude, title }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Carica il CSS di Leaflet
+    // Ngarko CSS-në e Leaflet
     const link = document.createElement('link')
     link.rel = 'stylesheet'
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'
     document.head.appendChild(link)
 
-    // Carica il JS di Leaflet
+    // Ngarko JS-në e Leaflet
     const script = document.createElement('script')
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
     script.async = true
@@ -48,7 +48,7 @@ export default function MapComponent({ latitude, longitude, title }: MapProps) {
 
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 Ubicazione ritiro</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 Vendndodhja e marrjes</h3>
       <div
         ref={mapContainer}
         className="w-full h-96 rounded-2xl border border-gray-100 overflow-hidden"

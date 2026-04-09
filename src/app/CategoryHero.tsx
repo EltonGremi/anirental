@@ -5,14 +5,14 @@ import { VEHICLE_CATEGORIES } from '@/lib/categories'
 
 export default function CategoryHero() {
   return (
-    <div className="bg-white px-8 py-4 border-b border-gray-200" id="categorie">
+    <div className="bg-white px-8 py-4 border-b border-gray-200" id="kategori">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-4">
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">
-            Scegli la Tua Categoria
+            Zgjidh Kategorinë Tënde
           </h2>
           <p className="text-gray-600 text-xs md:text-sm">
-            Trova il veicolo perfetto per le tue esigenze
+            Gjej mjetin perfekt për nevojat e tua
           </p>
         </div>
 

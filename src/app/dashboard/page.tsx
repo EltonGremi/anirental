@@ -34,15 +34,15 @@ export default async function DashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">
-              {isAdmin ? 'Pannello Admin' : 'Le mie prenotazioni'}
+              {isAdmin ? 'Paneli i Adminit' : 'Rezervimet e mia'}
             </h1>
             <p className="text-gray-500 text-sm mt-1">
-              {profile?.full_name} · {isAdmin ? 'Amministratore' : 'Cliente'}
+              {profile?.full_name} · {isAdmin ? 'Administrator' : 'Klient'}
             </p>
           </div>
           <form action="/auth/signout" method="post">
             <button className="text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-4 py-2">
-              Esci
+              Dil
             </button>
           </form>
         </div>
@@ -51,15 +51,15 @@ export default async function DashboardPage() {
           <>
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="bg-white rounded-2xl border border-gray-100 p-6">
-                <p className="text-sm text-gray-500 mb-1">Prenotazioni pending</p>
+                <p className="text-sm text-gray-500 mb-1">Rezervime në pritje</p>
                 <p className="text-3xl font-semibold text-amber-500">{pendingCount ?? 0}</p>
               </div>
               <div className="bg-white rounded-2xl border border-gray-100 p-6">
-                <p className="text-sm text-gray-500 mb-1">Confermate</p>
+                <p className="text-sm text-gray-500 mb-1">Konfirmuara</p>
                 <p className="text-3xl font-semibold text-green-500">{confirmedCount ?? 0}</p>
               </div>
               <div className="bg-white rounded-2xl border border-gray-100 p-6">
-                <p className="text-sm text-gray-500 mb-1">Auto disponibili</p>
+                <p className="text-sm text-gray-500 mb-1">Makina të disponueshme</p>
                 <p className="text-3xl font-semibold text-blue-500">{vehiclesCount ?? 0}</p>
               </div>
             </div>
@@ -67,19 +67,19 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-2 gap-4">
               <Link href="/dashboard/vehicles"
                 className="bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-300 transition">
-                <p className="font-medium text-gray-900 mb-1">Gestisci veicoli</p>
-                <p className="text-sm text-gray-500">Aggiungi, modifica o rimuovi auto dal parco</p>
+                <p className="font-medium text-gray-900 mb-1">Menaxho mjetet</p>
+                <p className="text-sm text-gray-500">Shto, modifiko ose hiq makina nga flota</p>
               </Link>
               <Link href="/dashboard/bookings"
                 className="bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-300 transition">
-                <p className="font-medium text-gray-900 mb-1">Prenotazioni</p>
-                <p className="text-sm text-gray-500">Visualizza e gestisci tutte le prenotazioni</p>
+                <p className="font-medium text-gray-900 mb-1">Rezervimet</p>
+                <p className="text-sm text-gray-500">Shiko dhe menaxho të gjitha rezervimet</p>
               </Link>
             </div>
           </>
         ) : (
           <div>
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Le mie prenotazioni</h2>
+            <h2 className="text-lg font-medium text-gray-900 mb-4">Rezervimet e mia</h2>
             <ClientBookings userId={user.id} />
           </div>
         )}

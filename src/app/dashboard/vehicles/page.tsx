@@ -28,21 +28,21 @@ export default async function VehiclesPage() {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Veicoli</h1>
-            <p className="text-gray-500 text-sm mt-1">Gestisci il tuo parco auto</p>
+            <h1 className="text-2xl font-semibold text-gray-900">Mjetet</h1>
+            <p className="text-gray-500 text-sm mt-1">Menaxho flotën tënde</p>
           </div>
           <Link
             href="/dashboard/vehicles/new"
             className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-700 transition"
           >
-            + Aggiungi veicolo
+            + Shto mjet
           </Link>
         </div>
 
         {vehicles && vehicles.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">
             {vehicles.map((v) => {
-              const category = getCategoryById(v.category || 'famiglia')
+              const category = getCategoryById(v.category || 'familje')
               return (
                 <div key={v.id} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -50,7 +50,7 @@ export default async function VehiclesPage() {
                       <img src={v.photos[0]} alt={v.model} className="w-16 h-12 object-cover rounded-lg" />
                     ) : (
                       <div className="w-16 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-xs">
-                        No foto
+                        Pa foto
                       </div>
                     )}
                     <div>
@@ -61,19 +61,19 @@ export default async function VehiclesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <p className="font-semibold text-gray-900">{v.daily_rate} ALL<span className="text-gray-400 font-normal">/giorno</span></p>
+                    <p className="font-semibold text-gray-900">{v.daily_rate} ALL<span className="text-gray-400 font-normal">/ditë</span></p>
                     <span className={`text-xs font-medium px-3 py-1 rounded-full ${
                       v.status === 'available'
                         ? 'bg-green-50 text-green-600'
                         : 'bg-red-50 text-red-500'
                     }`}>
-                      {v.status === 'available' ? 'Disponibile' : 'Non disponibile'}
+                      {v.status === 'available' ? 'I disponueshëm' : 'Jo i disponueshëm'}
                     </span>
                     <Link
                       href={`/dashboard/vehicles/${v.id}`}
                       className="text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-3 py-1"
                     >
-                      Modifica
+                      Modifiko
                     </Link>
                   </div>
                 </div>
@@ -82,12 +82,12 @@ export default async function VehiclesPage() {
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center">
-            <p className="text-gray-500 text-sm mb-4">Nessun veicolo ancora. Aggiungi il primo!</p>
+            <p className="text-gray-500 text-sm mb-4">Nuk ka mjete akoma. Shto të parin!</p>
             <Link
               href="/dashboard/vehicles/new"
               className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-700 transition"
             >
-              + Aggiungi veicolo
+              + Shto mjet
             </Link>
           </div>
         )}

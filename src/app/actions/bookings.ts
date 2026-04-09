@@ -18,23 +18,23 @@ export async function cancelBooking(bookingId: string) {
 
   const isAdmin = profile?.role === 'admin'
 
-  // Prendi la prenotazione
+  // Merr rezervimin
   const { data: booking } = await supabase
     .from('bookings')
     .select('*')
     .eq('id', bookingId)
     .single()
 
-  if (!booking) return { error: 'Prenotazione non trovata' }
+  if (!booking) return { error: 'Rezervimi nuk u gjet' }
 
-  // Cliente può cancellare solo le proprie prenotazioni
+  // Klienti mund të anulojë vetëm rezervimet e veta
   if (!isAdmin && booking.client_id !== user.id) {
-    return { error: 'Non autorizzato' }
+    return { error: 'Jo i autorizuar' }
   }
 
-  // Non si può cancellare una prenotazione già completata
+  // Nuk mund të anulohet një rezervim i përfunduar
   if (booking.status === 'completed') {
-    return { error: 'Non puoi cancellare una prenotazione completata' }
+    return { error: 'Nuk mund të anulosh një rezervim të përfunduar' }
   }
 
   const { error } = await supabase

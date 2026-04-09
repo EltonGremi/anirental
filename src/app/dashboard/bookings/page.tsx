@@ -5,11 +5,11 @@ import CancelButton from '../CancelButton'
 import { formatPrice } from '@/lib/format'
 
 const statusLabel: Record<string, string> = {
-  pending: 'In attesa',
-  confirmed: 'Confermata',
-  active: 'Attiva',
-  completed: 'Completata',
-  cancelled: 'Annullata',
+  pending: 'Në pritje',
+  confirmed: 'Konfirmuar',
+  active: 'Aktive',
+  completed: 'Përfunduar',
+  cancelled: 'Anuluar',
 }
 
 const statusColor: Record<string, string> = {
@@ -49,12 +49,12 @@ export default async function BookingsPage() {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Prenotazioni</h1>
-            <p className="text-gray-500 text-sm mt-1">Tutte le richieste ricevute</p>
+            <h1 className="text-2xl font-semibold text-gray-900">Rezervimet</h1>
+            <p className="text-gray-500 text-sm mt-1">Të gjitha kërkesat e pranuara</p>
           </div>
           <Link href="/dashboard"
             className="text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-4 py-2">
-            ← Dashboard
+            ← Paneli
           </Link>
         </div>
 
@@ -68,7 +68,7 @@ export default async function BookingsPage() {
                       {b.vehicle?.brand} {b.vehicle?.model} · {b.vehicle?.plate}
                     </p>
                     <p className="text-sm text-gray-500 mt-1">
-                      {b.client?.full_name} · {b.client?.phone ?? 'No telefono'}
+                      {b.client?.full_name} · {b.client?.phone ?? 'Pa telefon'}
                     </p>
                   </div>
                   <span className={`text-xs px-3 py-1 rounded-full font-medium ${statusColor[b.status]}`}>
@@ -78,24 +78,24 @@ export default async function BookingsPage() {
 
                 <div className="grid grid-cols-3 gap-4 text-sm border-t border-gray-50 pt-4">
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Periodo</p>
+                    <p className="text-gray-400 text-xs mb-1">Periudha</p>
                     <p className="text-gray-700">{b.start_date} → {b.end_date}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Totale</p>
+                    <p className="text-gray-400 text-xs mb-1">Totali</p>
                     <p className="text-gray-700 font-medium">{formatPrice(b.total_price)} ALL</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Richiesta il</p>
+                    <p className="text-gray-400 text-xs mb-1">Kërkuar më</p>
                     <p className="text-gray-700">
-                      {new Date(b.created_at).toLocaleDateString('it-IT')}
+                      {new Date(b.created_at).toLocaleDateString('sq-AL')}
                     </p>
                   </div>
                 </div>
 
                 {b.notes && (
                   <div className="mt-3 pt-3 border-t border-gray-50">
-                    <p className="text-xs text-gray-400 mb-1">Note cliente</p>
+                    <p className="text-xs text-gray-400 mb-1">Shënime të klientit</p>
                     <p className="text-sm text-gray-600">{b.notes}</p>
                   </div>
                 )}
@@ -111,7 +111,7 @@ export default async function BookingsPage() {
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-            <p className="text-gray-400">Nessuna prenotazione ancora</p>
+            <p className="text-gray-400">Nuk ka rezervime akoma</p>
           </div>
         )}
 

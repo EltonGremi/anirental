@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           AutoRent Albania
         </Link>
         <Link href="/login" className="text-sm text-white bg-gray-900 hover:bg-gray-700 rounded-lg px-4 py-2">
-          Accedi
+          Hyr
         </Link>
       </header>
 
@@ -52,7 +52,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <div className="max-w-4xl mx-auto px-8 py-4">
         <div className="text-sm text-gray-500">
           <Link href="/" className="hover:text-gray-700">
-            Home
+            Kryefaqja
           </Link>
           <span className="mx-2">/</span>
           <span>{category.name}</span>
@@ -64,7 +64,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         {vehicles && vehicles.length > 0 ? (
           <>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">
-              {vehicles.length} {vehicles.length === 1 ? 'veicolo' : 'veicoli'} disponibili
+              {vehicles.length} {vehicles.length === 1 ? 'mjet i disponueshëm' : 'mjete të disponueshme'}
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {vehicles.map((v) => (
@@ -82,7 +82,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                        Nessuna foto
+                        Nuk ka foto
                       </div>
                     )}
                   </div>
@@ -93,17 +93,17 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                         {v.brand} {v.model}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {v.year} · {v.seats} posti · {v.transmission === 'manual' ? 'Manuale' : 'Automatico'}
+                        {v.year} · {v.seats} vende · {v.transmission === 'manual' ? 'Manual' : 'Automatik'}
                       </p>
                     </div>
                     
                     <div className="mb-4">
                       <p className="text-2xl font-bold text-blue-900">{formatPrice(v.daily_rate)} ALL</p>
-                      <p className="text-xs text-gray-400">al giorno</p>
+                      <p className="text-xs text-gray-400">në ditë</p>
                     </div>
 
                     <button className="btn-primary w-full py-2 text-sm">
-                      Prenota
+                      Rezervo
                     </button>
                   </div>
                 </Link>
@@ -112,9 +112,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-6">Nessun veicolo disponibile in questa categoria al momento.</p>
+            <p className="text-gray-500 mb-6">Nuk ka mjete të disponueshme në këtë kategori për momentin.</p>
             <Link href="/" className="text-gray-900 font-medium hover:underline">
-              ← Torna alla home
+              ← Kthehu te kryefaqja
             </Link>
           </div>
         )}

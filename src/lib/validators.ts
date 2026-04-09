@@ -1,98 +1,98 @@
 import { z } from 'zod'
 
 /**
- * Validatori Zod per la sicurezza dell'input
- * Usati sia client-side (feedback UX) che server-side (sicurezza vera)
+ * Validatorë Zod për sigurinë të input-it
+ * Përdoren si client-side (feedback UX) ashtu edhe server-side (siguri reale)
  */
 
-// Telefono: 9+ cifre, può contenere spazi, dash, parentesi, +
+// Telefon: 9+ shifra, mund të përmbajë hapësira, viza, kllapa, +
 export const phoneSchema = z
   .string()
-  .min(9, 'Numero di telefono troppo corto (minimo 9 caratteri)')
-  .max(20, 'Numero di telefono troppo lungo')
-  .regex(/^[\d\s\-\+\(\)]+$/, 'Formato numero non valido')
+  .min(9, 'Numri i telefonit është shumë i shkurtër (minimum 9 karaktere)')
+  .max(20, 'Numri i telefonit është shumë i gjatë')
+  .regex(/^[\d\s\-\+\(\)]+$/, 'Formati i numrit nuk është i vlefshëm')
   .transform(val => val.trim())
 
-// Data in formato YYYY-MM-DD
+// Datë në formatin YYYY-MM-DD
 export const dateSchema = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato data non valido')
-  .refine(val => !isNaN(new Date(val).getTime()), 'Data non valida')
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formati i datës nuk është i vlefshëm')
+  .refine(val => !isNaN(new Date(val).getTime()), 'Datë e pavlefshme')
 
-// Note/commenti: max 500 caratteri, no HTML tags
+// Shënime/komente: maksimumi 500 karaktere, pa tag HTML
 export const noteSchema = z
   .string()
-  .max(500, 'Massimo 500 caratteri')
-  .regex(/^[^<>]*$/, 'Non sono permessi tag HTML')
+  .max(500, 'Maksimumi 500 karaktere')
+  .regex(/^[^<>]*$/, 'Nuk lejohen tag-e HTML')
   .optional()
 
-// Rating per review: 1-5
+// Vlerësim për review: 1-5
 export const ratingSchema = z
   .number()
-  .int('Il rating deve essere un numero intero')
-  .min(1, 'Il rating minimo è 1')
-  .max(5, 'Il rating massimo è 5')
+  .int('Vlerësimi duhet të jetë numër i plotë')
+  .min(1, 'Vlerësimi minimal është 1')
+  .max(5, 'Vlerësimi maksimal është 5')
 
-// Commento review: max 1000 caratteri
+// Koment review: maksimumi 1000 karaktere
 export const commentSchema = z
   .string()
-  .max(1000, 'Massimo 1000 caratteri')
-  .regex(/^[^<>]*$/, 'Non sono permessi tag HTML')
+  .max(1000, 'Maksimumi 1000 karaktere')
+  .regex(/^[^<>]*$/, 'Nuk lejohen tag-e HTML')
   .optional()
 
-// Booking form validation
+// Validimi i formës së rezervimit
 export const bookingSchema = z.object({
-  vehicle_id: z.string().uuid('ID veicolo non valido'),
-  client_id: z.string().uuid('ID cliente non valido'),
+  vehicle_id: z.string().uuid('ID e mjetit nuk është e vlefshme'),
+  client_id: z.string().uuid('ID e klientit nuk është e vlefshme'),
   start_date: dateSchema,
   end_date: dateSchema,
   phone_number: phoneSchema,
   notes: noteSchema,
-  total_price: z.number().positive('Prezzo deve essere positivo'),
+  total_price: z.number().positive('Çmimi duhet të jetë pozitiv'),
 }).refine(
   data => new Date(data.start_date) < new Date(data.end_date),
-  { message: 'Data inizio deve essere prima di fine', path: ['end_date'] }
+  { message: 'Data e fillimit duhet të jetë para datës së përfundimit', path: ['end_date'] }
 )
 
-// Review form validation
+// Validimi i formës së vlerësimit
 export const reviewSchema = z.object({
-  vehicle_id: z.string().uuid('ID veicolo non valido'),
-  author_id: z.string().uuid('ID autore non valido'),
+  vehicle_id: z.string().uuid('ID e mjetit nuk është e vlefshme'),
+  author_id: z.string().uuid('ID e autorit nuk është e vlefshme'),
   author_name: z.string().min(1).max(100),
   rating: ratingSchema,
   comment: commentSchema,
 })
 
-// Vehicle form validation
+// Validimi i formës së mjetit
 export const vehicleSchema = z.object({
   brand: z
     .string()
-    .min(1, 'Marca obbligatoria')
-    .max(50, 'Marca troppo lunga')
-    .regex(/^[a-zA-Z0-9\s\-&]+$/, 'Caratteri non validi nella marca'),
+    .min(1, 'Marka është e detyrueshme')
+    .max(50, 'Marka është shumë e gjatë')
+    .regex(/^[a-zA-Z0-9\s\-&]+$/, 'Karaktere të pavlefshme në markë'),
   model: z
     .string()
-    .min(1, 'Modello obbligatorio')
-    .max(100, 'Modello troppo lungo')
-    .regex(/^[a-zA-Z0-9\s\-&]+$/, 'Caratteri non validi nel modello'),
+    .min(1, 'Modeli është i detyrueshëm')
+    .max(100, 'Modeli është shumë i gjatë')
+    .regex(/^[a-zA-Z0-9\s\-&]+$/, 'Karaktere të pavlefshme në model'),
   plate: z
     .string()
-    .min(6, 'Targa troppo corta')
-    .max(10, 'Targa troppo lunga')
-    .regex(/^[A-Z0-9\-]+$/, 'Formato targa non valido'),
+    .min(6, 'Targa është shumë e shkurtër')
+    .max(10, 'Targa është shumë e gjatë')
+    .regex(/^[A-Z0-9\-]+$/, 'Formati i targës nuk është i vlefshëm'),
   year: z.number().int().min(1900).max(new Date().getFullYear() + 1),
-  price_per_day: z.number().positive('Prezzo deve essere positivo'),
-  latitude: z.number().min(-90).max(90, 'Latitudine non valida'),
-  longitude: z.number().min(-180).max(180, 'Longitudine non valida'),
-  description: z.string().max(2000).regex(/^[^<>]*$/, 'No HTML tags'),
+  price_per_day: z.number().positive('Çmimi duhet të jetë pozitiv'),
+  latitude: z.number().min(-90).max(90, 'Gjerësia gjeografike nuk është e vlefshme'),
+  longitude: z.number().min(-180).max(180, 'Gjatësia gjeografike nuk është e vlefshme'),
+  description: z.string().max(2000).regex(/^[^<>]*$/, 'Nuk lejohen tag-e HTML'),
 })
 
-// Location validation
+// Validimi i vendndodhjes
 export const locationSchema = z.object({
   latitude: z.number()
-    .min(-90, 'Latitudine deve essere tra -90 e 90')
-    .max(90, 'Latitudine deve essere tra -90 e 90'),
+    .min(-90, 'Gjerësia gjeografike duhet të jetë midis -90 dhe 90')
+    .max(90, 'Gjerësia gjeografike duhet të jetë midis -90 dhe 90'),
   longitude: z.number()
-    .min(-180, 'Longitudine deve essere tra -180 e 180')
-    .max(180, 'Longitudine deve essere tra -180 e 180'),
+    .min(-180, 'Gjatësia gjeografike duhet të jetë midis -180 dhe 180')
+    .max(180, 'Gjatësia gjeografike duhet të jetë midis -180 dhe 180'),
 })

@@ -50,25 +50,25 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
       return
     }
 
-    // Validazione con Zod
+    // Validimi me Zod
     try {
       phoneSchema.parse(phoneNumber)
       dateSchema.parse(startDate)
       dateSchema.parse(endDate)
       noteSchema.parse(notes)
     } catch (err: any) {
-      setError(err.message || 'Errore di validazione')
+      setError(err.message || 'Gabim validimi')
       return
     }
 
     if (datesOverlap()) {
-      setError('Le date selezionate si sovrappongono a una prenotazione esistente.')
+      setError('Datat e zgjedhura mbivendosen me një rezervim ekzistues.')
       return
     }
 
     const days = calcDays()
     if (days <= 0) {
-      setError('Seleziona un periodo valido.')
+      setError('Zgjidh një periudhë të vlefshme.')
       return
     }
 
@@ -88,7 +88,7 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
     setLoading(false)
 
     if (err) {
-      setError('Errore durante la prenotazione: ' + err.message)
+      setError('Gabim gjatë rezervimit: ' + err.message)
     } else {
       router.push('/booking/success')
     }
@@ -99,25 +99,25 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6">
-      <h2 className="font-medium text-gray-900 mb-6">Richiedi prenotazione</h2>
+      <h2 className="font-medium text-gray-900 mb-6">Kërko rezervim</h2>
 
       {!user && (
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-6 text-sm text-amber-700">
-          Devi accedere per prenotare.{' '}
-          <a href="/login" className="font-medium underline">Accedi qui</a>
+          Duhet të hysh për të rezervuar.{' '}
+          <a href="/login" className="font-medium underline">Hyr këtu</a>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">Data inizio</label>
+            <label className="text-sm text-gray-600 mb-1 block">Data e fillimit</label>
             <input type="date" value={startDate} min={today}
               onChange={e => setStartDate(e.target.value)} required
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
           </div>
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">Data fine</label>
+            <label className="text-sm text-gray-600 mb-1 block">Data e përfundimit</label>
             <input type="date" value={endDate} min={startDate || today}
               onChange={e => setEndDate(e.target.value)} required
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
@@ -126,35 +126,35 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
 
         <div>
           <label className="text-sm text-gray-600 mb-1 block">
-            Numero di telefono <span className="text-red-500">*</span>
+            Numri i telefonit <span className="text-red-500">*</span>
           </label>
           <input 
             type="tel" 
             value={phoneNumber} 
             onChange={e => setPhoneNumber(e.target.value)}
-            placeholder="Es. +355 69 123 4567 o 06912345"
+            placeholder="P.sh. +355 69 123 4567 ose 06912345"
             required
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
-          <p className="text-xs text-gray-400 mt-1">Necessario per contattarti riguardo la prenotazione</p>
+          <p className="text-xs text-gray-400 mt-1">E nevojshme për t'ju kontaktuar në lidhje me rezervimin</p>
         </div>
 
         <div>
-          <label className="text-sm text-gray-600 mb-1 block">Note (opzionale)</label>
+          <label className="text-sm text-gray-600 mb-1 block">Shënime (opsionale)</label>
           <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
-            placeholder="Es. ritiro in aeroporto..."
+            placeholder="P.sh. marrje në aeroport..."
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
         </div>
 
         {days > 0 && (
           <div className="bg-gray-50 rounded-xl p-4 text-sm">
             <div className="flex justify-between text-gray-500 mb-1">
-              <span>{formatPrice(vehicle.daily_rate)} ALL × {days} giorni</span>
+              <span>{formatPrice(vehicle.daily_rate)} ALL × {days} ditë</span>
             </div>
             <div className="flex justify-between font-semibold text-gray-900 text-base">
-              <span>Totale stimato</span>
+              <span>Totali i vlerësuar</span>
               <span>{formatPrice(total)} ALL</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2">Il prezzo è indicativo — verrà confermato dall'admin via Telegram</p>
+            <p className="text-xs text-gray-400 mt-2">Çmimi është tregues — do të konfirmohet nga admini përmes Telegram</p>
           </div>
         )}
 
@@ -166,7 +166,7 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
 
         <button type="submit" disabled={loading || !user}
           className="btn-primary w-full py-3 text-sm font-medium disabled:opacity-50">
-          {loading ? 'Invio richiesta...' : 'Invia richiesta di prenotazione'}
+          {loading ? 'Duke dërguar kërkesën...' : 'Dërgo kërkesën për rezervim'}
         </button>
       </form>
     </div>

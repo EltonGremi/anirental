@@ -3,11 +3,11 @@ import { formatPrice } from '@/lib/format'
 import CancelButton from './CancelButton'
 
 const statusLabel: Record<string, string> = {
-  pending: 'In attesa di conferma',
-  confirmed: 'Confermata',
-  active: 'In corso',
-  completed: 'Completata',
-  cancelled: 'Annullata',
+  pending: 'Në pritje të konfirmimit',
+  confirmed: 'Konfirmuar',
+  active: 'Aktive',
+  completed: 'Përfunduar',
+  cancelled: 'Anuluar',
 }
 
 const statusColor: Record<string, string> = {
@@ -33,10 +33,10 @@ export default async function ClientBookings({ userId }: { userId: string }) {
   if (!bookings || bookings.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-        <p className="text-gray-400 mb-4">Non hai ancora prenotazioni</p>
+        <p className="text-gray-400 mb-4">Nuk keni rezervime akoma</p>
         <a href="/"
           className="text-sm text-white bg-gray-900 hover:bg-gray-700 rounded-lg px-4 py-2">
-          Sfoglia le auto →
+          Shfleto makinat →
         </a>
       </div>
     )
@@ -52,7 +52,7 @@ export default async function ClientBookings({ userId }: { userId: string }) {
                 className="w-24 h-16 object-cover rounded-lg flex-shrink-0" />
             ) : (
               <div className="w-24 h-16 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xs">
-                No foto
+                Pa foto
               </div>
             )}
             <div className="flex-1">
@@ -72,18 +72,18 @@ export default async function ClientBookings({ userId }: { userId: string }) {
                   {formatPrice(b.total_price)} ALL
                 </p>
                 <p className="text-xs text-gray-400">
-                  Richiesta il {new Date(b.created_at).toLocaleDateString('it-IT')}
+                  Kërkuar më {new Date(b.created_at).toLocaleDateString('sq-AL')}
                 </p>
               </div>
 
               {b.status === 'pending' && (
                 <div className="mt-3 bg-amber-50 rounded-lg px-3 py-2 text-xs text-amber-700">
-                  In attesa di conferma — verrai contattato via Telegram o telefono
+                  Në pritje të konfirmimit — do të kontaktoheni përmes Telegram ose telefonit
                 </div>
               )}
               {b.status === 'confirmed' && (
                 <div className="mt-3 bg-green-50 rounded-lg px-3 py-2 text-xs text-green-700">
-                  Prenotazione confermata — ci vediamo al ritiro!
+                  Rezervimi u konfirmua — shihemi në marrje!
                 </div>
               )}
 

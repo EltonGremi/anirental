@@ -24,16 +24,16 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
     setError('')
 
     if (!user) {
-      alert('Devi essere loggato per lasciare una recensione')
+      alert('Duhet të jesh i kyçur për të lënë një vlerësim')
       return
     }
 
-    // Validazione con Zod
+    // Validimi me Zod
     try {
       ratingSchema.parse(rating)
       commentSchema.parse(comment)
     } catch (err: any) {
-      setError(err.message || 'Errore di validazione')
+      setError(err.message || 'Gabim validimi')
       return
     }
 
@@ -50,7 +50,7 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
     setLoading(false)
 
     if (err) {
-      setError('Errore: ' + err.message)
+      setError('Gabim: ' + err.message)
     } else {
       setSubmitted(true)
       setComment('')
@@ -62,15 +62,15 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">⭐ Lascia una recensione</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">⭐ Lër një vlerësim</h3>
 
       {!user ? (
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-700">
-          Devi <a href="/login" className="font-medium underline">accedere</a> per lasciare una recensione.
+          Duhet të <a href="/login" className="font-medium underline">hysh</a> për të lënë një vlerësim.
         </div>
       ) : submitted ? (
         <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm text-green-700">
-          ✅ Grazie per la tua recensione!
+          ✅ Faleminderit për vlerësimin tënd!
         </div>
       ) : (
         <>
@@ -81,7 +81,7 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
           )}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Valutazione</label>
+            <label className="text-sm text-gray-600 mb-2 block">Vlerësimi</label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -99,11 +99,11 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Commento (opzionale)</label>
+            <label className="text-sm text-gray-600 mb-2 block">Komenti (opsional)</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Condividi la tua esperienza..."
+              placeholder="Ndaj përvojën tënde..."
               maxLength={500}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none"
               rows={4}
@@ -116,7 +116,7 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
             disabled={loading}
             className="bg-gray-900 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
           >
-            {loading ? 'Invio...' : 'Invia recensione'}
+            {loading ? 'Duke dërguar...' : 'Dërgo vlerësimin'}
           </button>
           </form>
         </>

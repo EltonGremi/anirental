@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import FilterBar from './FilterBar'
 import Link from 'next/link'
 import { VEHICLE_CATEGORIES } from '@/lib/categories'
 import { formatPrice } from '@/lib/format'
@@ -31,10 +30,10 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
     category: '',
   })
 
-  // Estrai le marche disponibili
+  // Nxirr markat e disponueshme
   const brands = Array.from(new Set(vehicles.map((v) => v.brand)))
 
-  // Filtra i veicoli in base ai filtri selezionati
+  // Filtro mjetet sipas filtrave të zgjedhura
   const filteredVehicles = useMemo(() => {
     return vehicles.filter((v) => {
       if (filters.brand && v.brand !== filters.brand) return false
@@ -48,18 +47,18 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
   return (
     <>
       <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">🔍 Filtra veicoli</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">🔍 Filtro mjetet</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {/* Categoria */}
+          {/* Kategoria */}
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Categoria</label>
+            <label className="text-sm text-gray-600 mb-2 block">Kategoria</label>
             <select
               value={filters.category}
               onChange={(e) => setFilters({...filters, category: e.target.value})}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
             >
-              <option value="">Tutte le categorie</option>
+              <option value="">Të gjitha kategoritë</option>
               {VEHICLE_CATEGORIES.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -68,15 +67,15 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
             </select>
           </div>
 
-          {/* Marca */}
+          {/* Marka */}
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Marca</label>
+            <label className="text-sm text-gray-600 mb-2 block">Marka</label>
             <select
               value={filters.brand}
               onChange={(e) => setFilters({...filters, brand: e.target.value})}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
             >
-              <option value="">Tutte le marche</option>
+              <option value="">Të gjitha markat</option>
               {brands.map((brand) => (
                 <option key={brand} value={brand}>
                   {brand}
@@ -85,9 +84,9 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
             </select>
           </div>
 
-          {/* Prezzo massimo */}
+          {/* Çmimi maksimal */}
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Prezzo massimo</label>
+            <label className="text-sm text-gray-600 mb-2 block">Çmimi maksimal</label>
             <div>
               <input
                 type="range"
@@ -97,21 +96,21 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
                 onChange={(e) => setFilters({...filters, maxPrice: Number(e.target.value)})}
                 className="w-full"
               />
-              <p className="text-xs text-gray-500 mt-1">fino {formatPrice(filters.maxPrice)} ALL/giorno</p>
+              <p className="text-xs text-gray-500 mt-1">deri {formatPrice(filters.maxPrice)} ALL/ditë</p>
             </div>
           </div>
 
-          {/* Trasmissione */}
+          {/* Transmetimi */}
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Trasmissione</label>
+            <label className="text-sm text-gray-600 mb-2 block">Transmetimi</label>
             <select
               value={filters.transmission}
               onChange={(e) => setFilters({...filters, transmission: e.target.value})}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
             >
-              <option value="">Tutte</option>
-              <option value="manual">Manuale</option>
-              <option value="automatic">Automatico</option>
+              <option value="">Të gjitha</option>
+              <option value="manual">Manual</option>
+              <option value="automatic">Automatik</option>
             </select>
           </div>
 
@@ -121,7 +120,7 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
               onClick={() => setFilters({brand: '', minPrice: 0, maxPrice: 10000, transmission: '', category: ''})}
               className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg px-3 py-2 text-sm font-medium transition"
             >
-              Cancella filtri
+              Pastro filtrat
             </button>
           </div>
         </div>
@@ -144,7 +143,7 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                    Nessuna foto
+                    Nuk ka foto
                   </div>
                 )}
               </div>
@@ -155,17 +154,17 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
                     {v.brand} {v.model}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {v.year} · {v.seats} posti · {v.transmission === 'manual' ? 'Manuale' : 'Automatico'}
+                    {v.year} · {v.seats} vende · {v.transmission === 'manual' ? 'Manual' : 'Automatik'}
                   </p>
                 </div>
                 
                 <div className="mb-4">
                   <p className="text-2xl font-bold text-blue-900">{formatPrice(v.daily_rate)} ALL</p>
-                  <p className="text-xs text-gray-400">al giorno</p>
+                  <p className="text-xs text-gray-400">në ditë</p>
                 </div>
 
                 <button className="btn-primary w-full py-2 text-sm">
-                  Prenota
+                  Rezervo
                 </button>
               </div>
             </Link>
@@ -173,8 +172,8 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
         </div>
       ) : (
         <div className="text-center py-16 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-gray-500 text-base">Nessun veicolo trovato</p>
-          <p className="text-gray-400 text-sm mt-1">Modifica i tuoi criteri di ricerca</p>
+          <p className="text-gray-500 text-base">Nuk u gjet asnjë mjet</p>
+          <p className="text-gray-400 text-sm mt-1">Ndrysho kriteret e kërkimit</p>
         </div>
       )}
     </>

@@ -9,7 +9,7 @@ export default function VideoPlayer({ url }: { url?: string }) {
         controlsList="nodownload"
       >
         <source src={url} type="video/mp4" />
-        Il tuo browser non supporta il video.
+        Shfletuesi yt nuk mbështet videon.
       </video>
     </div>
   )

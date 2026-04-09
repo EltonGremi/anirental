@@ -23,12 +23,12 @@ export default function EditVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'famiglia',
+    category: 'familje',
     latitude: 40.748305,
     longitude: 19.649150,
   })
 
-  // Carica dati del veicolo
+  // Ngarko të dhënat e mjetit
   useEffect(() => {
     const fetchVehicle = async () => {
       const { data, error } = await supabase
@@ -47,7 +47,7 @@ export default function EditVehiclePage() {
           seats: data.seats?.toString() || '',
           transmission: data.transmission,
           daily_rate: data.daily_rate?.toString() || '',
-          category: data.category || 'famiglia',
+          category: data.category || 'familje',
           latitude: data.latitude || 40.748305,
           longitude: data.longitude || 19.649150,
         })
@@ -81,17 +81,17 @@ export default function EditVehiclePage() {
     setSaving(false)
 
     if (!error) {
-      alert('✅ Veicolo aggiornato!')
+      alert('✅ Mjeti u përditësua!')
       router.push('/dashboard/vehicles')
     } else {
-      alert('❌ Errore: ' + error.message)
+      alert('❌ Gabim: ' + error.message)
     }
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 p-8 flex items-center justify-center">
-        <p className="text-gray-500">Caricamento...</p>
+        <p className="text-gray-500">Duke ngarkuar...</p>
       </div>
     )
   }
@@ -104,21 +104,21 @@ export default function EditVehiclePage() {
             onClick={() => router.back()}
             className="text-gray-500 hover:text-gray-700 text-sm mb-4"
           >
-            ← Indietro
+            ← Kthehu mbrapa
           </button>
-          <h1 className="text-2xl font-semibold text-gray-900">Modifica veicolo</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Modifiko mjetin</h1>
           <p className="text-gray-500 text-sm mt-1">
             {vehicle?.brand} {vehicle?.model} · {vehicle?.plate}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6">
-          {/* Info generali */}
+          {/* Informacione të përgjithshme */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Info generali</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Informacione të përgjithshme</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Marca</label>
+                <label className="text-sm text-gray-600 mb-1 block">Marka</label>
                 <input
                   required
                   type="text"
@@ -128,7 +128,7 @@ export default function EditVehiclePage() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Modello</label>
+                <label className="text-sm text-gray-600 mb-1 block">Modeli</label>
                 <input
                   required
                   type="text"
@@ -148,7 +148,7 @@ export default function EditVehiclePage() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Anno</label>
+                <label className="text-sm text-gray-600 mb-1 block">Viti</label>
                 <input
                   required
                   type="number"
@@ -160,12 +160,12 @@ export default function EditVehiclePage() {
             </div>
           </div>
 
-          {/* Dettagli */}
+          {/* Detaje */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">🔧 Dettagli</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">🔧 Detaje</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Posti</label>
+                <label className="text-sm text-gray-600 mb-1 block">Vende</label>
                 <input
                   required
                   type="number"
@@ -175,18 +175,18 @@ export default function EditVehiclePage() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Trasmissione</label>
+                <label className="text-sm text-gray-600 mb-1 block">Marsha</label>
                 <select
                   value={form.transmission}
                   onChange={(e) => setForm({...form, transmission: e.target.value})}
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="manual">Manuale</option>
-                  <option value="automatic">Automatico</option>
+                  <option value="manual">Manual</option>
+                  <option value="automatic">Automatik</option>
                 </select>
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Prezzo al giorno (ALL)</label>
+                <label className="text-sm text-gray-600 mb-1 block">Çmimi ditor (ALL)</label>
                 <input
                   required
                   type="number"
@@ -196,7 +196,7 @@ export default function EditVehiclePage() {
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
                 />
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Categoria</label>
+                <label className="text-sm text-gray-600 mb-1 block">Kategoria</label>
                 <select
                   required
                   value={form.category}
@@ -214,9 +214,9 @@ export default function EditVehiclePage() {
             </div>
           </div>
 
-          {/* Ubicazione ritiro */}
+          {/* Vendndodhja e marrjes */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">📍 Ubicazione ritiro</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">📍 Vendndodhja e marrjes</h2>
             <LocationPicker
               initialLat={form.latitude}
               initialLng={form.longitude}
@@ -226,21 +226,21 @@ export default function EditVehiclePage() {
             />
           </div>
 
-          {/* Bottoni */}
+          {/* Butonat */}
           <div className="flex gap-4 pt-4">
             <button
               type="submit"
               disabled={saving}
               className="flex-1 bg-gray-900 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
             >
-              {saving ? 'Salvataggio...' : '💾 Salva modifiche'}
+              {saving ? 'Duke ruajtur...' : '💾 Ruaj ndryshimet'}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
               className="flex-1 border border-gray-200 text-gray-700 rounded-lg px-4 py-3 text-sm font-medium hover:bg-gray-50"
             >
-              Annulla
+              Anulo
             </button>
           </div>
         </form>

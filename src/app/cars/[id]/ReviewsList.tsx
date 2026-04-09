@@ -2,7 +2,7 @@ export default function ReviewsList({ reviews }: { reviews?: any[] }) {
   if (!reviews?.length) {
     return (
       <div className="bg-gray-50 rounded-2xl p-8 text-center text-gray-500 mb-8">
-        <p>Nessuna recensione ancora. Sii il primo! ⭐</p>
+        <p>Nuk ka vlerësime akoma. Bëhu i pari! ⭐</p>
       </div>
     )
   }
@@ -14,7 +14,7 @@ export default function ReviewsList({ reviews }: { reviews?: any[] }) {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-gray-900">Recensioni</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Vlerësimet</h2>
         <div className="flex items-center gap-2">
           <span className="text-2xl font-bold text-gray-900">{avgRating}</span>
           <div className="flex">
@@ -41,7 +41,7 @@ export default function ReviewsList({ reviews }: { reviews?: any[] }) {
             <div className="flex items-start justify-between mb-2">
               <div>
                 <p className="font-medium text-gray-900">{review.author_name}</p>
-                <p className="text-xs text-gray-500">{new Date(review.created_at).toLocaleDateString('it-IT')}</p>
+                <p className="text-xs text-gray-500">{new Date(review.created_at).toLocaleDateString('sq-AL')}</p>
               </div>
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
