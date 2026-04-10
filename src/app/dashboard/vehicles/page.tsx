@@ -42,7 +42,7 @@ export default async function VehiclesPage() {
         {vehicles && vehicles.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">
             {vehicles.map((v) => {
-              const category = getCategoryById(v.category || 'familje')
+              const category = getCategoryById(v.category || 'gruppo-auto')
               return (
                 <div key={v.id} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center justify-between">
                   <div className="flex items-center gap-4">

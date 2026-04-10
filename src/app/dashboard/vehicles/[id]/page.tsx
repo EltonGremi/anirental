@@ -23,7 +23,7 @@ export default function EditVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'familje',
+    category: 'gruppo-auto',
     latitude: 40.748305,
     longitude: 19.649150,
   })
@@ -47,7 +47,7 @@ export default function EditVehiclePage() {
           seats: data.seats?.toString() || '',
           transmission: data.transmission,
           daily_rate: data.daily_rate?.toString() || '',
-          category: data.category || 'familje',
+          category: data.category || 'gruppo-auto',
           latitude: data.latitude || 40.748305,
           longitude: data.longitude || 19.649150,
         })

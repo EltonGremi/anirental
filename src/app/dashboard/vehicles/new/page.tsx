@@ -22,7 +22,7 @@ export default function NewVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'familje',
+    category: 'gruppo-auto',
     latitude: 40.748305,
     longitude: 19.649150,
   })

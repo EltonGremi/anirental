@@ -22,107 +22,118 @@ interface VehicleFiltersProps {
 }
 
 export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
-  const [filters, setFilters] = useState({
-    brand: '',
-    minPrice: 0,
-    maxPrice: 10000,
-    transmission: '',
-    category: '',
-  })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [activeCategory, setActiveCategory] = useState<string>('')
+  const [activeTag, setActiveTag] = useState<string>('')
 
-  // Nxirr markat e disponueshme
-  const brands = Array.from(new Set(vehicles.map((v) => v.brand)))
+  // Definizione dei Quick Filters divisi per categoria principale
+  const getQuickFilters = (categoryId: string) => {
+    switch (categoryId) {
+      case 'gruppo-auto':
+        return ['Moto/Scooter', 'SUV', '5 Porte', 'Manuale', 'Automatik']
+      case 'gruppo-trasporto':
+        return ['Trasporto Persone', 'Trasporto Merci']
+      case 'gruppo-speciali':
+        return ['Camper', 'Camion', 'Trasporto Inerti', 'Escavatori']
+      default:
+        // Filtri veloci globali se nessuna categoria è selezionata
+        return ['SUV', 'Automatik', 'Familjare', 'Furgon']
+    }
+  }
 
-  // Filtro mjetet sipas filtrave të zgjedhura
+  // Funzione helper per verificare se il veicolo matcha il tag speciale
+  const vehicleMatchesTag = (v: Vehicle, tag: string) => {
+    const t = tag.toLowerCase()
+    const str = `${v.brand} ${v.model} ${v.category} ${v.transmission}`.toLowerCase()
+    
+    if (t === '5 porte' || t === 'sf') return v.seats >= 4 // approssimazione
+    if (t === 'trasporto persone') return v.seats > 5 // approssimazione per furgoni passeggeri
+    if (str.includes(t)) return true
+    return false
+  }
+
+  // Filtro mjetet
   const filteredVehicles = useMemo(() => {
-    return vehicles.filter((v) => {
-      if (filters.brand && v.brand !== filters.brand) return false
-      if (v.daily_rate > filters.maxPrice) return false
-      if (filters.transmission && v.transmission !== filters.transmission) return false
-      if (filters.category && v.category !== filters.category) return false
-      return true
-    })
-  }, [vehicles, filters])
+    let result = vehicles
+
+    // Filtro per macro-categoria (se leccata la linguetta in alto)
+    if (activeCategory) {
+      result = result.filter(v => v.category === activeCategory)
+    }
+
+    // Filtro per barra di ricerca (tutto testo libero)
+    if (searchQuery.trim() !== '') {
+      const q = searchQuery.toLowerCase()
+      result = result.filter(v => {
+        const fullString = `${v.brand} ${v.model} ${v.year} ${v.seats} vende ${v.transmission} ${v.category}`.toLowerCase()
+        // Cerca che tutte le parole chiave siano presenti
+        return q.split(' ').every(word => fullString.includes(word))
+      })
+    }
+
+    // Filtro per Tag Rapido
+    if (activeTag) {
+      result = result.filter(v => vehicleMatchesTag(v, activeTag))
+    }
+
+    return result
+  }, [vehicles, searchQuery, activeCategory, activeTag])
+
+  const quickFilters = getQuickFilters(activeCategory)
 
   return (
     <>
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">🔍 Filtro mjetet</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {/* Kategoria */}
-          <div>
-            <label className="text-sm text-gray-600 mb-2 block">Kategoria</label>
-            <select
-              value={filters.category}
-              onChange={(e) => setFilters({...filters, category: e.target.value})}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-            >
-              <option value="">Të gjitha kategoritë</option>
-              {VEHICLE_CATEGORIES.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Marka */}
-          <div>
-            <label className="text-sm text-gray-600 mb-2 block">Marka</label>
-            <select
-              value={filters.brand}
-              onChange={(e) => setFilters({...filters, brand: e.target.value})}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-            >
-              <option value="">Të gjitha markat</option>
-              {brands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Çmimi maksimal */}
-          <div>
-            <label className="text-sm text-gray-600 mb-2 block">Çmimi maksimal</label>
-            <div>
-              <input
-                type="range"
-                min={filters.minPrice}
-                max={10000}
-                value={filters.maxPrice}
-                onChange={(e) => setFilters({...filters, maxPrice: Number(e.target.value)})}
-                className="w-full"
-              />
-              <p className="text-xs text-gray-500 mt-1">deri {formatPrice(filters.maxPrice)} ALL/ditë</p>
-            </div>
-          </div>
-
-          {/* Transmetimi */}
-          <div>
-            <label className="text-sm text-gray-600 mb-2 block">Transmetimi</label>
-            <select
-              value={filters.transmission}
-              onChange={(e) => setFilters({...filters, transmission: e.target.value})}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-            >
-              <option value="">Të gjitha</option>
-              <option value="manual">Manual</option>
-              <option value="automatic">Automatik</option>
-            </select>
-          </div>
-
-          {/* Reset */}
-          <div className="flex items-end">
+      <div className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 p-8 mb-12">
+        
+        {/* Category Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-zinc-100 pb-4">
+          <button
+            onClick={() => { setActiveCategory(''); setActiveTag(''); }}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === '' ? 'bg-black text-white' : 'text-zinc-500 hover:text-black hover:bg-zinc-50'}`}
+          >
+            Të Gjitha
+          </button>
+          {VEHICLE_CATEGORIES.map(cat => (
             <button
-              onClick={() => setFilters({brand: '', minPrice: 0, maxPrice: 10000, transmission: '', category: ''})}
-              className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg px-3 py-2 text-sm font-medium transition"
+              key={cat.id}
+              onClick={() => { setActiveCategory(cat.id); setActiveTag(''); }}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === cat.id ? 'bg-black text-white' : 'text-zinc-500 hover:text-black hover:bg-zinc-50'}`}
             >
-              Pastro filtrat
+              {cat.name.replace(/[^a-zA-Z\s,]/g, '')}
             </button>
+          ))}
+        </div>
+
+        {/* Free Text Search Bar */}
+        <div className="relative mb-6">
+          <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+            <span className="text-xl opacity-40">🔍</span>
           </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cerca veicolo (es. suv automatico, basso consumo, 5 posti...)"
+            className="w-full bg-zinc-50 border-0 rounded-full py-5 pl-16 pr-6 text-lg text-black placeholder:text-zinc-400 focus:ring-2 focus:ring-black outline-none transition-all"
+          />
+        </div>
+
+        {/* Quick Filters Chips */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider mr-2">Filtra të Shpejta:</span>
+          {quickFilters.map(tag => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(activeTag === tag ? '' : tag)}
+              className={`px-4 py-1.5 rounded-full text-sm transition-all border ${
+                activeTag === tag 
+                  ? 'border-black bg-black text-white' 
+                  : 'border-zinc-200 text-zinc-600 bg-white hover:border-zinc-300'
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
         </div>
       </div>
 
