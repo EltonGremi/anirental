@@ -85,25 +85,40 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
     <>
       <div className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 p-8 mb-12">
         
-        {/* Category Select */}
-        <div className="mb-6 relative">
-          <label className="text-sm font-medium text-zinc-500 mb-2 block uppercase tracking-wider">Zgjidh Kategorinë</label>
-          <div className="relative">
-            <select
-              value={activeCategory}
-              onChange={(e) => { setActiveCategory(e.target.value); setActiveTag(''); }}
-              className="w-full appearance-none bg-zinc-50 border-0 rounded-2xl py-4 pl-6 pr-12 text-lg font-medium text-black outline-none focus:ring-2 focus:ring-black transition-all cursor-pointer"
-            >
-              <option value="">Të Gjitha Kategoritë (Mostra Tutto)</option>
-              {VEHICLE_CATEGORIES.map(cat => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.icon} {cat.name}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none">
-              <span className="text-black opacity-50 transition-transform">▼</span>
-            </div>
+        {/* Category Cards (Acts like a select) */}
+        <div className="mb-8">
+          <label className="text-sm font-medium text-zinc-500 mb-4 block uppercase tracking-wider">Zgjidh Kategorinë</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {VEHICLE_CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <div
+                  key={cat.id}
+                  onClick={() => {
+                    // Se clicco la card già attiva, rimuovo il filtro (mostro tutto)
+                    setActiveCategory(isActive ? '' : cat.id);
+                    setActiveTag('');
+                  }}
+                  className={`card-hover group cursor-pointer border rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 h-full ${
+                    isActive 
+                      ? 'border-black bg-black text-white shadow-xl scale-[1.02]' 
+                      : 'border-zinc-100 bg-zinc-50 hover:bg-white hover:border-zinc-300 text-black'
+                  }`}
+                >
+                  <div className={`text-4xl mb-6 transition-transform duration-300 ${!isActive && 'group-hover:scale-110 opacity-80 group-hover:opacity-100'}`}>
+                    {cat.icon}
+                  </div>
+                  <div>
+                    <h3 className={`font-semibold text-lg mb-1 ${isActive ? 'text-white' : 'text-black'}`}>
+                      {cat.name.replace(/[^a-zA-Z\s,]/g, '')}
+                    </h3>
+                    <p className={`text-sm font-light line-clamp-2 ${isActive ? 'text-zinc-300' : 'text-zinc-500'}`}>
+                      {cat.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
