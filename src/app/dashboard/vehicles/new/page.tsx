@@ -22,7 +22,8 @@ export default function NewVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'gruppo-auto',
+    category: '', // Vuoto all'inizio per forzare la scelta
+    description: '',
     latitude: 40.748305,
     longitude: 19.649150,
   })
@@ -60,7 +61,7 @@ export default function NewVehiclePage() {
         price_per_day: parseFloat(form.daily_rate),
         latitude: form.latitude,
         longitude: form.longitude,
-        description: '',
+        description: form.description,
       })
     } catch (err: any) {
       setError(err.message || 'Gabim validimi')
@@ -68,15 +69,21 @@ export default function NewVehiclePage() {
       return
     }
 
+    // Default per campi nascosti se la categoria non li prevede (Gruppo 3)
+    const isHeavy = form.category === 'gruppo-speciali'
+    const finalSeats = isHeavy ? 1 : (parseInt(form.seats) || 1)
+    const finalTransmission = isHeavy ? 'manual' : form.transmission
+
     const { error } = await supabase.from('vehicles').insert({
       brand: form.brand,
       model: form.model,
       plate: form.plate.toUpperCase(),
       year: parseInt(form.year),
-      seats: parseInt(form.seats),
-      transmission: form.transmission,
+      seats: finalSeats,
+      transmission: finalTransmission,
       daily_rate: parseFloat(form.daily_rate),
       category: form.category,
+      description: form.description,
       latitude: form.latitude,
       longitude: form.longitude,
       photos: photoUrl ? [photoUrl] : [],
@@ -92,153 +99,197 @@ export default function NewVehiclePage() {
     }
   }
 
+  const isHeavy = form.category === 'gruppo-speciali'
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-xl mx-auto">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Mjet i ri</h1>
-        <p className="text-gray-500 text-sm mb-8">Plotëso të dhënat e mjetit</p>
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-black tracking-tight mb-2">Mjet i ri</h1>
+          <p className="text-zinc-500 text-lg font-light">Zgjidh kategorinë për të vazhduar me detajet</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col gap-4">
-
-          {error && (
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-700">
-              {error}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Marka</label>
-              <input
-                required
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.brand}
-                onChange={e => setForm({...form, brand: e.target.value})}
-                placeholder="Toyota"
-              />
-            </div>
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Modeli</label>
-              <input
-                required
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.model}
-                onChange={e => setForm({...form, model: e.target.value})}
-                placeholder="Corolla"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Targa</label>
-              <input
-                required
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.plate}
-                onChange={e => setForm({...form, plate: e.target.value})}
-                placeholder="AA 123 BB"
-              />
-            </div>
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Viti</label>
-              <input
-                required
-                type="number"
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.year}
-                onChange={e => setForm({...form, year: e.target.value})}
-                placeholder="2022"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Vende</label>
-              <input
-                required
-                type="number"
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.seats}
-                onChange={e => setForm({...form, seats: e.target.value})}
-                placeholder="5"
-              />
-            </div>
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Marsha</label>
-              <select
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.transmission}
-                onChange={e => setForm({...form, transmission: e.target.value})}
+        {/* Step 1: Category Selection Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {VEHICLE_CATEGORIES.map((cat) => {
+            const isActive = form.category === cat.id
+            return (
+              <div
+                key={cat.id}
+                onClick={() => setForm({ ...form, category: cat.id })}
+                className={`cursor-pointer border rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
+                  isActive
+                    ? 'border-black bg-black text-white shadow-xl scale-[1.02]'
+                    : 'border-zinc-200 bg-white hover:border-zinc-300 text-black'
+                }`}
               >
-                <option value="manual">Manual</option>
-                <option value="automatic">Automatik</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Kategoria</label>
-              <select
-                required
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-                value={form.category}
-                onChange={e => setForm({...form, category: e.target.value})}
-              >
-                {VEHICLE_CATEGORIES.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+                <div className="text-4xl mb-4">{cat.icon}</div>
+                <div>
+                  <h3 className={`font-semibold text-lg ${isActive ? 'text-white' : 'text-black'}`}>
+                    {cat.name.replace(/[^a-zA-Z\s,]/g, '')}
+                  </h3>
+                </div>
+              </div>
+            )
+          })}
+        </div>
 
-          <div>
-            <label className="text-sm text-gray-600 mb-1 block">Çmimi ditor (ALL)</label>
-            <input
-              required
-              type="number"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm"
-              value={form.daily_rate}
-              onChange={e => setForm({...form, daily_rate: e.target.value})}
-              placeholder="3000"
-            />
-          </div>
+        {/* Step 2: Conditional Form */}
+        {form.category && (
+          <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] shadow-sm border border-zinc-100 p-10 flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            <div className="border-b border-zinc-100 pb-4">
+              <h2 className="text-2xl font-semibold text-black">Te Dhenat Kryesore</h2>
+            </div>
 
-          <div>
-            <label className="text-sm text-gray-600 mb-1 block">Foto</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhoto}
-              className="w-full text-sm text-gray-500"
-            />
-            {uploading && <p className="text-xs text-gray-400 mt-1">Duke ngarkuar...</p>}
-            {photoUrl && (
-              <img src={photoUrl} alt="preview" className="mt-2 w-full h-40 object-cover rounded-xl" />
+            {error && (
+              <div className="bg-red-50 border border-red-100 rounded-2xl p-5 text-sm text-red-700 font-medium">
+                {error}
+              </div>
             )}
-          </div>
 
-          <div className="border-t border-gray-100 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 Vendndodhja e marrjes</h3>
-            <LocationPicker
-              initialLat={40.748305}
-              initialLng={19.649150}
-              onLocationChange={(lat, lng) => {
-                setForm({...form, latitude: lat, longitude: lng})
-              }}
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Marka</label>
+                <input
+                  required
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                  value={form.brand}
+                  onChange={e => setForm({...form, brand: e.target.value})}
+                  placeholder="psh. Toyota"
+                />
+              </div>
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Modeli</label>
+                <input
+                  required
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                  value={form.model}
+                  onChange={e => setForm({...form, model: e.target.value})}
+                  placeholder="psh. Corolla"
+                />
+              </div>
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading || uploading}
-            className="btn-primary w-full py-3 text-sm font-medium disabled:opacity-50"
-          >
-            {loading ? 'Duke ruajtur...' : 'Ruaj mjetin'}
-          </button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Targa</label>
+                <input
+                  required
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all uppercase"
+                  value={form.plate}
+                  onChange={e => setForm({...form, plate: e.target.value})}
+                  placeholder="AA 123 BB"
+                />
+              </div>
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Viti</label>
+                <input
+                  required
+                  type="number"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                  value={form.year}
+                  onChange={e => setForm({...form, year: e.target.value})}
+                  placeholder="2024"
+                />
+              </div>
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Çmimi ditor / ALL</label>
+                <input
+                  required
+                  type="number"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg font-bold text-blue-900 focus:ring-2 focus:ring-black outline-none transition-all"
+                  value={form.daily_rate}
+                  onChange={e => setForm({...form, daily_rate: e.target.value})}
+                  placeholder="5000"
+                />
+              </div>
+            </div>
 
-        </form>
+            {/* Conditional Fields (Hidden for Special Vehicles) */}
+            {!isHeavy && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-zinc-100 pt-8 mt-4">
+                <div>
+                  <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Vende</label>
+                  <input
+                    required={!isHeavy}
+                    type="number"
+                    className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                    value={form.seats}
+                    onChange={e => setForm({...form, seats: e.target.value})}
+                    placeholder="5"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Marsha</label>
+                  <select
+                    className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all cursor-pointer"
+                    value={form.transmission}
+                    onChange={e => setForm({...form, transmission: e.target.value})}
+                  >
+                    <option value="manual">Manual</option>
+                    <option value="automatic">Automatik</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* Description / Notes */}
+            <div className="border-t border-zinc-100 pt-8 mt-4">
+              <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Shënime & Informacione Extra</label>
+              <textarea
+                className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                rows={3}
+                value={form.description}
+                onChange={e => setForm({...form, description: e.target.value})}
+                placeholder="Shkruaj detaje si: kapaciteti i bagazhit, pajisje speciale, gërvishtje, rregulla specifike..."
+              />
+            </div>
+
+            {/* Location & Photos */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-zinc-100 pt-8 mt-4">
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Pika e Marrjes (Harta)</label>
+                <div className="h-64 rounded-2xl overflow-hidden border border-zinc-200">
+                  <LocationPicker 
+                    latitude={form.latitude}
+                    longitude={form.longitude}
+                    onChange={(lat, lng) => setForm({...form, latitude: lat, longitude: lng})}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Foto e Mjetit</label>
+                <div className="border-2 border-dashed border-zinc-300 rounded-2xl p-8 flex flex-col items-center justify-center bg-zinc-50 text-center h-64">
+                  {photoUrl ? (
+                    <img src={photoUrl} alt="Preview" className="h-full w-full object-cover rounded-xl" />
+                  ) : (
+                    <>
+                      <div className="text-3xl mb-2">📸</div>
+                      <p className="text-sm text-zinc-500 mb-4 font-light">Ngarko një foto ballore të mjetit</p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhoto}
+                        disabled={uploading}
+                        className="text-sm text-black file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:opacity-90 transition-all"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || uploading}
+              className="mt-8 w-full bg-black text-white hover:bg-zinc-800 disabled:bg-zinc-300 disabled:cursor-not-allowed rounded-full py-5 text-lg font-medium transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.39)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.23)]"
+            >
+              {loading ? 'Duke e ruajtur...' : 'Shto Mjetin në Flotë'}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   )

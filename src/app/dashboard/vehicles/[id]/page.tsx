@@ -23,7 +23,8 @@ export default function EditVehiclePage() {
     seats: '',
     transmission: 'manual',
     daily_rate: '',
-    category: 'gruppo-auto',
+    category: '',
+    description: '',
     latitude: 40.748305,
     longitude: 19.649150,
   })
@@ -47,7 +48,8 @@ export default function EditVehiclePage() {
           seats: data.seats?.toString() || '',
           transmission: data.transmission,
           daily_rate: data.daily_rate?.toString() || '',
-          category: data.category || 'gruppo-auto',
+          category: data.category || '',
+          description: data.description || '',
           latitude: data.latitude || 40.748305,
           longitude: data.longitude || 19.649150,
         })
@@ -62,6 +64,10 @@ export default function EditVehiclePage() {
     e.preventDefault()
     setSaving(true)
 
+    const isHeavy = form.category === 'gruppo-speciali'
+    const finalSeats = isHeavy ? 1 : (parseInt(form.seats) || 1)
+    const finalTransmission = isHeavy ? 'manual' : form.transmission
+
     const { error } = await supabase
       .from('vehicles')
       .update({
@@ -69,9 +75,10 @@ export default function EditVehiclePage() {
         model: form.model,
         plate: form.plate,
         year: parseInt(form.year),
-        seats: parseInt(form.seats),
-        transmission: form.transmission,
+        seats: finalSeats,
+        transmission: finalTransmission,
         category: form.category,
+        description: form.description,
         daily_rate: parseFloat(form.daily_rate),
         latitude: form.latitude,
         longitude: form.longitude,
@@ -96,154 +103,184 @@ export default function EditVehiclePage() {
     )
   }
 
+  const isHeavy = form.category === 'gruppo-speciali'
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
+      <div className="max-w-4xl mx-auto">
+        
+        <div className="mb-8 flex items-start gap-4">
           <button
             onClick={() => router.back()}
-            className="text-gray-500 hover:text-gray-700 text-sm mb-4"
+            className="mt-1 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-zinc-200 text-zinc-500 hover:text-black hover:border-black transition-all"
+            title="Kthehu mbrapa"
           >
-            ← Kthehu mbrapa
+            ←
           </button>
-          <h1 className="text-2xl font-semibold text-gray-900">Modifiko mjetin</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            {vehicle?.brand} {vehicle?.model} · {vehicle?.plate}
-          </p>
+          <div>
+            <h1 className="text-3xl font-bold text-black tracking-tight mb-1">Modifiko Mjetin</h1>
+            <p className="text-zinc-500 text-lg font-light">
+              {vehicle?.brand} {vehicle?.model} · <span className="font-medium text-black uppercase">{vehicle?.plate}</span>
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-6">
-          {/* Informacione të përgjithshme */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Informacione të përgjithshme</h2>
-            <div className="grid grid-cols-2 gap-4">
+        {/* Step 1: Category Selection Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {VEHICLE_CATEGORIES.map((cat) => {
+            const isActive = form.category === cat.id
+            return (
+              <div
+                key={cat.id}
+                onClick={() => setForm({ ...form, category: cat.id })}
+                className={`cursor-pointer border rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ${
+                  isActive
+                    ? 'border-black bg-black text-white shadow-xl scale-[1.02]'
+                    : 'border-zinc-200 bg-white hover:border-zinc-300 text-black'
+                }`}
+              >
+                <div className="text-4xl mb-4">{cat.icon}</div>
+                <div>
+                  <h3 className={`font-semibold text-lg ${isActive ? 'text-white' : 'text-black'}`}>
+                    {cat.name.replace(/[^a-zA-Z\s,]/g, '')}
+                  </h3>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Step 2: Conditional Form */}
+        {form.category && (
+          <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] shadow-sm border border-zinc-100 p-10 flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            <div className="border-b border-zinc-100 pb-4">
+              <h2 className="text-2xl font-semibold text-black">Të Dhënat Kryesore</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Marka</label>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Marka</label>
                 <input
                   required
-                  type="text"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
                   value={form.brand}
-                  onChange={(e) => setForm({...form, brand: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  onChange={e => setForm({...form, brand: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Modeli</label>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Modeli</label>
                 <input
                   required
-                  type="text"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
                   value={form.model}
-                  onChange={(e) => setForm({...form, model: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  onChange={e => setForm({...form, model: e.target.value})}
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Targa</label>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Targa</label>
                 <input
                   required
-                  type="text"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all uppercase"
                   value={form.plate}
-                  onChange={(e) => setForm({...form, plate: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  onChange={e => setForm({...form, plate: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Viti</label>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Viti</label>
                 <input
                   required
                   type="number"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
                   value={form.year}
-                  onChange={(e) => setForm({...form, year: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Detaje */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">🔧 Detaje</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-gray-600 mb-1 block">Vende</label>
-                <input
-                  required
-                  type="number"
-                  value={form.seats}
-                  onChange={(e) => setForm({...form, seats: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  onChange={e => setForm({...form, year: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600 mb-1 block">Marsha</label>
-                <select
-                  value={form.transmission}
-                  onChange={(e) => setForm({...form, transmission: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                >
-                  <option value="manual">Manual</option>
-                  <option value="automatic">Automatik</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm text-gray-600 mb-1 block">Çmimi ditor (ALL)</label>
+                <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Çmimi ditor / ALL</label>
                 <input
                   required
                   type="number"
-                  step="100"
+                  className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg font-bold text-blue-900 focus:ring-2 focus:ring-black outline-none transition-all"
                   value={form.daily_rate}
-                  onChange={(e) => setForm({...form, daily_rate: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  onChange={e => setForm({...form, daily_rate: e.target.value})}
                 />
-              <div>
-                <label className="text-sm text-gray-600 mb-1 block">Kategoria</label>
-                <select
-                  required
-                  value={form.category}
-                  onChange={(e) => setForm({...form, category: e.target.value})}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                >
-                  {VEHICLE_CATEGORIES.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
               </div>
             </div>
-          </div>
 
-          {/* Vendndodhja e marrjes */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">📍 Vendndodhja e marrjes</h2>
-            <LocationPicker
-              initialLat={form.latitude}
-              initialLng={form.longitude}
-              onLocationChange={(lat, lng) => {
-                setForm({...form, latitude: lat, longitude: lng})
-              }}
-            />
-          </div>
+            {/* Conditional Fields */}
+            {!isHeavy && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-zinc-100 pt-8 mt-4">
+                <div>
+                  <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Vende</label>
+                  <input
+                    required={!isHeavy}
+                    type="number"
+                    className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                    value={form.seats}
+                    onChange={e => setForm({...form, seats: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Marsha</label>
+                  <select
+                    className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all cursor-pointer"
+                    value={form.transmission}
+                    onChange={e => setForm({...form, transmission: e.target.value})}
+                  >
+                    <option value="manual">Manual</option>
+                    <option value="automatic">Automatik</option>
+                  </select>
+                </div>
+              </div>
+            )}
 
-          {/* Butonat */}
-          <div className="flex gap-4 pt-4">
-            <button
-              type="submit"
-              disabled={saving}
-              className="flex-1 bg-gray-900 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
-            >
-              {saving ? 'Duke ruajtur...' : '💾 Ruaj ndryshimet'}
-            </button>
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex-1 border border-gray-200 text-gray-700 rounded-lg px-4 py-3 text-sm font-medium hover:bg-gray-50"
-            >
-              Anulo
-            </button>
-          </div>
-        </form>
+            {/* Description / Notes */}
+            <div className="border-t border-zinc-100 pt-8 mt-4">
+              <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Shënime & Informacione Extra</label>
+              <textarea
+                className="w-full bg-zinc-50 border-0 rounded-2xl px-5 py-4 text-lg focus:ring-2 focus:ring-black outline-none transition-all"
+                rows={3}
+                value={form.description}
+                onChange={e => setForm({...form, description: e.target.value})}
+                placeholder="Detaje rreth mjetit..."
+              />
+            </div>
+
+            {/* Location */}
+            <div className="border-t border-zinc-100 pt-8 mt-4">
+              <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Pika e Marrjes (Harta)</label>
+              <div className="h-72 rounded-2xl overflow-hidden border border-zinc-200">
+                <LocationPicker 
+                  initialLat={form.latitude}
+                  initialLng={form.longitude}
+                  onLocationChange={(lat, lng) => setForm({...form, latitude: lat, longitude: lng})}
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-4 pt-8 mt-4 border-t border-zinc-100">
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex-1 bg-black text-white hover:bg-zinc-800 disabled:bg-zinc-300 disabled:cursor-not-allowed rounded-full py-5 text-lg font-medium transition-all shadow-md"
+              >
+                {saving ? 'Duke e ruajtur...' : '💾 Ruaj Ndryshimet'}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="flex-none border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50 rounded-full px-8 py-5 text-lg font-medium transition-all"
+              >
+                Anulo
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   )
