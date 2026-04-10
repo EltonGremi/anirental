@@ -104,9 +104,18 @@ export default function NewVehiclePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black tracking-tight mb-2">Mjet i ri</h1>
-          <p className="text-zinc-500 text-lg font-light">Zgjidh kategorinë për të vazhduar me detajet</p>
+        <div className="mb-8 flex items-start gap-4">
+          <button
+            onClick={() => router.back()}
+            className="mt-1 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-zinc-200 text-zinc-500 hover:text-black hover:border-black transition-all"
+            title="Kthehu mbrapa"
+          >
+            ←
+          </button>
+          <div>
+            <h1 className="text-3xl font-bold text-black tracking-tight mb-2">Mjet i ri</h1>
+            <p className="text-zinc-500 text-lg font-light">Zgjidh kategorinë për të vazhduar me detajet</p>
+          </div>
         </div>
 
         {/* Step 1: Category Selection Cards */}

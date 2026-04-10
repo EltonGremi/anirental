@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { formatPrice } from '@/lib/format'
 import BookingForm from './BookingForm'
 import ImageGallery from './ImageGallery'
@@ -38,6 +39,12 @@ export default async function CarPage({ params }: { params: Promise<{ id: string
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-2xl mx-auto px-8 py-12">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-black transition-colors">
+            ← Kthehu te flota
+          </Link>
+        </div>
+
         <Badges badges={vehicle.badges} />
         <VideoPlayer url={vehicle.video_url} />
         <ImageGallery photos={vehicle.photos} />

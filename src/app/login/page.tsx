@@ -15,7 +15,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6 relative">
+      <div className="absolute top-8 left-8">
+        <a href="/" className="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-black transition-colors">
+          ← Kthehu në shtëpi
+        </a>
+      </div>
+      
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 w-full max-w-sm">
         <h1 className="text-2xl font-semibold text-gray-900 mb-2">AutoRent Albania</h1>
         <p className="text-gray-500 text-sm mb-8">Hyr për të menaxhuar rezervimet</p>
