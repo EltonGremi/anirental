@@ -30,11 +30,11 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
   const getQuickFilters = (categoryId: string) => {
     switch (categoryId) {
       case 'gruppo-auto':
-        return ['Moto/Scooter', 'SUV', '5 Porte', 'Manuale', 'Automatik']
+        return ['Moto/Skuter', 'SUV', '5 Dyer', 'Manual', 'Automatik']
       case 'gruppo-trasporto':
-        return ['Trasporto Persone', 'Trasporto Merci']
+        return ['Transport Pasagjerësh', 'Transport Mallrash']
       case 'gruppo-speciali':
-        return ['Camper', 'Camion', 'Trasporto Inerti', 'Escavatori']
+        return ['Kamper', 'Kamion', 'Materiale Ndërtimi', 'Ekskavatorë']
       default:
         // Filtri veloci globali se nessuna categoria è selezionata
         return ['SUV', 'Automatik', 'Familjare', 'Furgon']
@@ -46,8 +46,8 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
     const t = tag.toLowerCase()
     const str = `${v.brand} ${v.model} ${v.category} ${v.transmission}`.toLowerCase()
     
-    if (t === '5 porte' || t === 'sf') return v.seats >= 4 // approssimazione
-    if (t === 'trasporto persone') return v.seats > 5 // approssimazione per furgoni passeggeri
+    if (t === '5 dyer' || t === 'sf') return v.seats >= 4 // approssimazione
+    if (t === 'transport pasagjerësh') return v.seats > 5 // approssimazione per furgoni passeggeri
     if (str.includes(t)) return true
     return false
   }
@@ -123,8 +123,8 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
         </div>
 
         {/* Free Text Search Bar */}
-        <div className="relative mb-6">
-          <label className="text-sm font-medium text-zinc-500 mb-2 block uppercase tracking-wider">Kërkim Personalizuar</label>
+        <div className="relative mb-6 mt-8">
+          <label className="text-sm font-medium text-zinc-500 mb-2 block uppercase tracking-wider">Kërkim i Detajuar</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
               <span className="text-xl opacity-40">🔍</span>
@@ -133,7 +133,7 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cerca veicolo (es. automatico, basso consumo, 5 posti...)"
+              placeholder="Kërko (psh. automatik, pak harxhim, 5 vende...)"
               className="w-full bg-zinc-50 border-0 rounded-2xl py-4 pl-16 pr-6 text-lg text-black placeholder:text-zinc-400 focus:ring-2 focus:ring-black outline-none transition-all"
             />
           </div>
@@ -141,7 +141,7 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
 
         {/* Quick Filters Chips */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider mr-2">Filtra të Shpejta:</span>
+          <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider mr-2">Filtra të Shpejtë:</span>
           {quickFilters.map(tag => (
             <button
               key={tag}

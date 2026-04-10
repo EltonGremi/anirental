@@ -2,7 +2,7 @@ export const VEHICLE_CATEGORIES = [
   {
     id: 'gruppo-auto',
     name: 'Auto, Moto & SUV',
-    description: 'Auto familiari, fuoristrada, berline, moto e scooter.',
+    description: 'Makina familjare, fuoristradë, sedan, moto dhe skuter.',
     slug: 'auto',
     color: 'bg-zinc-50',
     textColor: 'text-black',
@@ -10,8 +10,8 @@ export const VEHICLE_CATEGORIES = [
   },
   {
     id: 'gruppo-trasporto',
-    name: 'Trasporto Passeggeri & Merci',
-    description: 'Furgoni merci, minivan per passeggeri e trasporto commerciale.',
+    name: 'Transport Pasagjerësh & Mallrash',
+    description: 'Furgonë mallrash, minivan për pasagjerë dhe transport komercial.',
     slug: 'trasporto',
     color: 'bg-zinc-50',
     textColor: 'text-black',
@@ -19,8 +19,8 @@ export const VEHICLE_CATEGORIES = [
   },
   {
     id: 'gruppo-speciali',
-    name: 'Camion, Camper & Macchinari',
-    description: 'Equipaggiamenti pesanti, camper, e camion industriali.',
+    name: 'Kamionë, Kamper & Makineri',
+    description: 'Pajisje të rënda, kamper dhe kamionë industrialë.',
     slug: 'speciali',
     color: 'bg-zinc-50',
     textColor: 'text-black',
