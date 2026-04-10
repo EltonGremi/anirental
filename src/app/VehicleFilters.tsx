@@ -85,37 +85,43 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
     <>
       <div className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 p-8 mb-12">
         
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 border-b border-zinc-100 pb-4">
-          <button
-            onClick={() => { setActiveCategory(''); setActiveTag(''); }}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === '' ? 'bg-black text-white' : 'text-zinc-500 hover:text-black hover:bg-zinc-50'}`}
-          >
-            Të Gjitha
-          </button>
-          {VEHICLE_CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => { setActiveCategory(cat.id); setActiveTag(''); }}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === cat.id ? 'bg-black text-white' : 'text-zinc-500 hover:text-black hover:bg-zinc-50'}`}
+        {/* Category Select */}
+        <div className="mb-6 relative">
+          <label className="text-sm font-medium text-zinc-500 mb-2 block uppercase tracking-wider">Zgjidh Kategorinë</label>
+          <div className="relative">
+            <select
+              value={activeCategory}
+              onChange={(e) => { setActiveCategory(e.target.value); setActiveTag(''); }}
+              className="w-full appearance-none bg-zinc-50 border-0 rounded-2xl py-4 pl-6 pr-12 text-lg font-medium text-black outline-none focus:ring-2 focus:ring-black transition-all cursor-pointer"
             >
-              {cat.name.replace(/[^a-zA-Z\s,]/g, '')}
-            </button>
-          ))}
+              <option value="">Të Gjitha Kategoritë (Mostra Tutto)</option>
+              {VEHICLE_CATEGORIES.map(cat => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.icon} {cat.name}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none">
+              <span className="text-black opacity-50 transition-transform">▼</span>
+            </div>
+          </div>
         </div>
 
         {/* Free Text Search Bar */}
         <div className="relative mb-6">
-          <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-            <span className="text-xl opacity-40">🔍</span>
+          <label className="text-sm font-medium text-zinc-500 mb-2 block uppercase tracking-wider">Kërkim Personalizuar</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+              <span className="text-xl opacity-40">🔍</span>
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cerca veicolo (es. automatico, basso consumo, 5 posti...)"
+              className="w-full bg-zinc-50 border-0 rounded-2xl py-4 pl-16 pr-6 text-lg text-black placeholder:text-zinc-400 focus:ring-2 focus:ring-black outline-none transition-all"
+            />
           </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cerca veicolo (es. suv automatico, basso consumo, 5 posti...)"
-            className="w-full bg-zinc-50 border-0 rounded-full py-5 pl-16 pr-6 text-lg text-black placeholder:text-zinc-400 focus:ring-2 focus:ring-black outline-none transition-all"
-          />
         </div>
 
         {/* Quick Filters Chips */}
@@ -125,10 +131,10 @@ export default function VehicleFilters({ vehicles }: VehicleFiltersProps) {
             <button
               key={tag}
               onClick={() => setActiveTag(activeTag === tag ? '' : tag)}
-              className={`px-4 py-1.5 rounded-full text-sm transition-all border ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border ${
                 activeTag === tag 
-                  ? 'border-black bg-black text-white' 
-                  : 'border-zinc-200 text-zinc-600 bg-white hover:border-zinc-300'
+                  ? 'border-black bg-black text-white shadow-md' 
+                  : 'border-zinc-200 text-zinc-600 bg-white hover:border-zinc-300 hover:bg-zinc-50'
               }`}
             >
               {tag}

@@ -75,12 +75,18 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Kategoritë */}
-      <CategoryHero />
-
-      {/* Katalog */}
-      <div className="max-w-4xl mx-auto px-8 py-4">
-        <h3 className="text-base font-medium text-gray-900 mb-4">Makina të disponueshme</h3>
+      <div className="max-w-7xl mx-auto px-8 py-20 w-full" id="kategori">
+        <div className="mb-12 flex items-end justify-between border-b border-zinc-100 pb-8">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-black tracking-tight mb-2">
+              Flota Jonë
+            </h2>
+            <p className="text-zinc-500 font-light text-lg">
+              Eksploro dhe filtro mjetet sipas nevojës tënde
+            </p>
+          </div>
+        </div>
+        
         <VehicleFilters vehicles={vehicles ?? []} />
       </div>
 
