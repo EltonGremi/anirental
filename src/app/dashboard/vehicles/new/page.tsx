@@ -252,9 +252,9 @@ export default function NewVehiclePage() {
                 <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Pika e Marrjes (Harta)</label>
                 <div className="h-64 rounded-2xl overflow-hidden border border-zinc-200">
                   <LocationPicker 
-                    latitude={form.latitude}
-                    longitude={form.longitude}
-                    onChange={(lat, lng) => setForm({...form, latitude: lat, longitude: lng})}
+                    initialLat={form.latitude}
+                    initialLng={form.longitude}
+                    onLocationChange={(lat, lng) => setForm({...form, latitude: lat, longitude: lng})}
                   />
                 </div>
               </div>
