@@ -98,7 +98,6 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
   const total = days * vehicle.daily_rate
 
   return (
-  return (
     <div className="bg-white rounded-3xl md:rounded-[2.5rem] shadow-sm border border-zinc-100 p-6 md:p-10 flex flex-col gap-6 md:gap-8">
       <div className="border-b border-zinc-100 pb-4">
         <h2 className="text-xl md:text-2xl font-semibold text-black">Kërko rezervim</h2>
