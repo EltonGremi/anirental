@@ -98,34 +98,37 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
   const total = days * vehicle.daily_rate
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
-      <h2 className="font-medium text-gray-900 mb-6">Kërko rezervim</h2>
+  return (
+    <div className="bg-white rounded-3xl md:rounded-[2.5rem] shadow-sm border border-zinc-100 p-6 md:p-10 flex flex-col gap-6 md:gap-8">
+      <div className="border-b border-zinc-100 pb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-black">Kërko rezervim</h2>
+      </div>
 
       {!user && (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-6 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 md:p-5 text-sm md:text-base text-amber-700">
           Duhet të hysh për të rezervuar.{' '}
-          <a href="/login" className="font-medium underline">Hyr këtu</a>
+          <a href="/login" className="font-semibold underline">Hyr këtu</a>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">Data e fillimit</label>
+            <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Data e fillimit</label>
             <input type="date" value={startDate} min={today}
               onChange={e => setStartDate(e.target.value)} required
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+              className="w-full bg-zinc-50 border-0 rounded-2xl px-4 py-3 md:px-5 md:py-4 text-base md:text-lg focus:ring-2 focus:ring-black outline-none transition-all" />
           </div>
           <div>
-            <label className="text-sm text-gray-600 mb-1 block">Data e përfundimit</label>
+            <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Data e përfundimit</label>
             <input type="date" value={endDate} min={startDate || today}
               onChange={e => setEndDate(e.target.value)} required
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+              className="w-full bg-zinc-50 border-0 rounded-2xl px-4 py-3 md:px-5 md:py-4 text-base md:text-lg focus:ring-2 focus:ring-black outline-none transition-all" />
           </div>
         </div>
 
         <div>
-          <label className="text-sm text-gray-600 mb-1 block">
+          <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">
             Numri i telefonit <span className="text-red-500">*</span>
           </label>
           <input 
@@ -134,38 +137,38 @@ export default function BookingForm({ vehicle, user, bookedDates }: Props) {
             onChange={e => setPhoneNumber(e.target.value)}
             placeholder="P.sh. +355 69 123 4567 ose 06912345"
             required
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
-          <p className="text-xs text-gray-400 mt-1">E nevojshme për t'ju kontaktuar në lidhje me rezervimin</p>
+            className="w-full bg-zinc-50 border-0 rounded-2xl px-4 py-3 md:px-5 md:py-4 text-base md:text-lg focus:ring-2 focus:ring-black outline-none transition-all" />
+          <p className="text-xs text-zinc-400 mt-2 font-light">E nevojshme për t'ju kontaktuar në lidhje me rezervimin</p>
         </div>
 
         <div>
-          <label className="text-sm text-gray-600 mb-1 block">Shënime (opsionale)</label>
+          <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Shënime (opsionale)</label>
           <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
             placeholder="P.sh. marrje në aeroport..."
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+            className="w-full bg-zinc-50 border-0 rounded-2xl px-4 py-3 md:px-5 md:py-4 text-base md:text-lg focus:ring-2 focus:ring-black outline-none transition-all" />
         </div>
 
         {days > 0 && (
-          <div className="bg-gray-50 rounded-xl p-4 text-sm">
-            <div className="flex justify-between text-gray-500 mb-1">
+          <div className="bg-zinc-50 rounded-2xl p-5 md:p-6 text-sm md:text-base border border-zinc-100">
+            <div className="flex justify-between text-zinc-500 mb-2 font-light">
               <span>{formatPrice(vehicle.daily_rate)} ALL × {days} ditë</span>
             </div>
-            <div className="flex justify-between font-semibold text-gray-900 text-base">
+            <div className="flex justify-between font-bold text-black text-lg md:text-xl">
               <span>Totali i vlerësuar</span>
               <span>{formatPrice(total)} ALL</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2">Çmimi është tregues — do të konfirmohet nga admini përmes Telegram</p>
+            <p className="text-xs text-zinc-400 mt-3 font-light">Çmimi është tregues — do të konfirmohet nga admini përmes Telegram</p>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-sm text-red-600">
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-4 md:p-5 text-sm md:text-base text-red-600 font-medium">
             {error}
           </div>
         )}
 
         <button type="submit" disabled={loading || !user}
-          className="btn-primary w-full py-3 text-sm font-medium disabled:opacity-50">
+          className="w-full bg-black text-white hover:bg-zinc-800 disabled:bg-zinc-300 disabled:cursor-not-allowed rounded-full py-4 md:py-5 text-base md:text-lg font-medium transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.39)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.23)]">
           {loading ? 'Duke dërguar kërkesën...' : 'Dërgo kërkesën për rezervim'}
         </button>
       </form>

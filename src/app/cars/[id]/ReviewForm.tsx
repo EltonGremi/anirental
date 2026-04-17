@@ -61,35 +61,37 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">⭐ Lër një vlerësim</h3>
+    <div className="bg-white rounded-3xl md:rounded-[2.5rem] shadow-sm border border-zinc-100 p-6 md:p-10 mb-8 flex flex-col gap-6 md:gap-8">
+      <div className="border-b border-zinc-100 pb-4">
+        <h3 className="text-xl md:text-2xl font-semibold text-black">⭐ Lër një vlerësim</h3>
+      </div>
 
       {!user ? (
-        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-700">
-          Duhet të <a href="/login" className="font-medium underline">hysh</a> për të lënë një vlerësim.
+        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 md:p-5 text-sm md:text-base text-amber-700">
+          Duhet të <a href="/login" className="font-semibold underline">hysh</a> për të lënë një vlerësim.
         </div>
       ) : submitted ? (
-        <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm text-green-700">
+        <div className="bg-green-50 border border-green-100 rounded-2xl p-4 md:p-5 text-sm md:text-base text-green-700 font-medium">
           ✅ Faleminderit për vlerësimin tënd!
         </div>
       ) : (
         <>
           {error && (
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-sm text-red-700 mb-4">
+            <div className="bg-red-50 border border-red-100 rounded-2xl p-4 md:p-5 text-sm md:text-base text-red-700">
               {error}
             </div>
           )}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-8">
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Vlerësimi</label>
+            <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-3 block">Vlerësimi</label>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   type="button"
                   onClick={() => setRating(star)}
-                  className={`text-3xl transition ${
-                    star <= rating ? 'text-amber-400' : 'text-gray-300'
+                  className={`text-4xl md:text-5xl transition-all hover:scale-110 active:scale-95 ${
+                    star <= rating ? 'text-amber-400 drop-shadow-sm' : 'text-zinc-200'
                   }`}
                 >
                   ★
@@ -99,22 +101,22 @@ export default function ReviewForm({ vehicleId, user }: ReviewFormProps) {
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 mb-2 block">Komenti (opsional)</label>
+            <label className="text-sm uppercase tracking-wider font-semibold text-zinc-500 mb-2 block">Komenti (opsional)</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Ndaj përvojën tënde..."
               maxLength={500}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none"
+              className="w-full bg-zinc-50 border-0 rounded-2xl px-4 py-3 md:px-5 md:py-4 text-base md:text-lg focus:ring-2 focus:ring-black outline-none transition-all resize-none"
               rows={4}
             />
-            <p className="text-xs text-gray-400 mt-1">{comment.length}/500</p>
+            <p className="text-xs text-zinc-400 mt-2 font-light">{comment.length}/500 karaktere</p>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-gray-900 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
+            className="w-full md:w-auto self-start bg-black text-white hover:bg-zinc-800 disabled:bg-zinc-300 disabled:cursor-not-allowed rounded-full px-8 py-4 text-base md:text-lg font-medium transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.39)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.23)]"
           >
             {loading ? 'Duke dërguar...' : 'Dërgo vlerësimin'}
           </button>
